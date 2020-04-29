@@ -1,7 +1,7 @@
 # nertivia.js
 NodeJS library for Nertivia API
 
-# Notice
+## Notice
 This library is in its early stages. A lot of features are missing. If you find any issues, make sure you post them in the issues page in GitHub.
 
 ## How to get Token
