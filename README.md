@@ -10,7 +10,7 @@ Make sure you do not make spam bots, ty :)
 
 To get your token:
 1. Open inspect element (`ctrl shift + i)
-2. Go to the `console` tab
+2. Go to the `Console` tab
 3. type in `localStorage.getItem("hauthid")`
 Your token should print out.
 
