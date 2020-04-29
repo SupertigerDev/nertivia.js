@@ -4,7 +4,7 @@ NodeJS library for Nertivia API
 ## Notice
 This library is in its early stages. A lot of features are missing. If you find any issues, make sure you post them in the issues page in GitHub.
 
-## How to get Token
+## Token
 Since bot users are not a thing right now, you can self bot.
 Make sure you do not make spam bots, ty :)
 
