@@ -6,21 +6,23 @@ import IAuthenticationData from './Interfaces/AuthenticationData';
 import {IClientEvents, clientEventsNames} from './Interfaces/ClientEvents';
 import Message from './Message';
 import Channel from './Channel';
+import Users from './Users';
+import Channels from './Channels';
 
 export class Client {
     token: string | null;
     user: User | null;
     listeners: Map<keyof IClientEvents | any, any>;
     socket: SocketIOClient.Socket;
-    users: Map<string, User>;
-    channels: Map<string, Channel>;
+    users: Users;
+    channels: Channels;
     constructor() {
         this.token = null;
         this.user = null;
         this.listeners = new Map();
         this.socket = io('https://nertivia.supertiger.tk', { autoConnect: false });
-        this.users = new Map<string, User>();
-        this.channels = new Map<string, Channel>();
+        this.users = new Users(this);
+        this.channels = new Channels(this);
     }
 
     login(token: string) {
@@ -40,17 +42,17 @@ export class Client {
                         avatar: data.user.avatar,
                         id: data.user.uniqueID
                     })
-                    this.users.set(this.user.id, this.user);
+                    this.users.cache.set(this.user.id, this.user);
 
                     // get users
                     for (let index = 0; index < data.serverMembers.length; index++) {
                         const member = data.serverMembers[index].member;
-                        this.users.set(member.uniqueID, new User(member))
+                        this.users.cache.set(member.uniqueID, new User(member))
                     }
 
                     for (let index = 0; index < data.dms.length; index++) {
                         const member = data.dms[index].recipients[0];
-                        this.users.set(member.uniqueID, new User(member))
+                        this.users.cache.set(member.uniqueID, new User(member))
                     }
 
                     // get channels
@@ -58,7 +60,7 @@ export class Client {
                         const servers = data.user.servers[index];
                         for (let index = 0; index < servers.channels.length; index++) {
                             const channel = servers.channels[index];
-                            this.channels.set(channel.channelID, new Channel(channel, this));                            
+                            this.channels.cache.set(channel.channelID, new Channel(channel, this));                            
                         }
                         
                     }
