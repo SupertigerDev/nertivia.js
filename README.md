@@ -1,4 +1,4 @@
-# nertivia.js
+# Nertivia.js
 NodeJS library for Nertivia API
 
 ## Notice
