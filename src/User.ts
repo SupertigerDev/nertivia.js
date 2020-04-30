@@ -18,10 +18,7 @@ export class User {
     toString() {
         return `<@${this.id}>`
     }
-    createDM() {
-
-    }
-    send() {
-
+    send(content: string) {
+        this.client.fetch.send(content, this);
     }
 }

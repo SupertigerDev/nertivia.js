@@ -11,6 +11,7 @@ import Channels from './Channels';
 import Guilds from './Guilds';
 import Guild from './Guild';
 import Fetch from './Utils/fetch';
+import DataManager from './DataManager';
 
 export class Client {
     token: string | null;
@@ -21,6 +22,7 @@ export class Client {
     channels: Channels;
     guilds: Guilds;
     fetch: Fetch;
+    dataManager: DataManager;
     constructor() {
         this.token = null;
         this.user = null;
@@ -30,6 +32,7 @@ export class Client {
         this.channels = new Channels(this);
         this.guilds = new Guilds(this);
         this.fetch = new Fetch(this);
+        this.dataManager = new DataManager(this);
     }
 
     login(token: string) {
@@ -63,8 +66,9 @@ export class Client {
                         if (!channel.recipients) continue;
                         const user = new User(channel.recipients[0], this);
                         this.users.cache.set(user.id, user)
-                        this.channels.cache.set(channel.channelID, new Channel(channel , this)); 
+                        this.dataManager.newChannel(channel);
                     }
+                    
 
                     // get servers + channels
                     for (let index = 0; index < data.user.servers.length; index++) {
@@ -72,7 +76,7 @@ export class Client {
                         this.guilds.cache.set(server.server_id, new Guild(server, this));
                         for (let index = 0; index < server.channels.length; index++) {
                             const channel = server.channels[index];
-                            this.channels.cache.set(channel.channelID, new Channel(channel, this));                            
+                            this.dataManager.newChannel(channel)                 
                         }
 
                     }

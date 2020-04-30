@@ -14,8 +14,8 @@ export default class Channel {
         this.guild = client.guilds.cache.get(channel.server_id);
         this.client = client
         this.recipient = undefined
-        if (channel.recipient && channel.recipient.length) {
-            this.recipient = this.client.users.cache.get(channel.recipient[0].uniqueID)
+        if (channel.recipients && channel.recipients.length) {
+            this.recipient = this.client.users.cache.get(channel.recipients[0].uniqueID)
         }
     }
     send(content:string) {
