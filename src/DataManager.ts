@@ -9,16 +9,15 @@ export default class DataManager {
         this.client = client;
     }
     newChannel(data: any, guild?: Guild) {
-        let channel: Channel | undefined;
+        const channel = new Channel(data, this.client);
         if (data.server_id) {
             guild = guild || this.client.guilds.cache.get(data.server_id);
             if (!guild) return;
-            channel = new Channel(data, this.client);
             guild.channels.set(data.channelID, channel)
         }
 
         if (channel) {
-           this.client.channels.cache.set(data.channelID, channel);
+           this.client.channels.cache.set(channel.id, channel);
            return channel
         } else {
             return undefined;
