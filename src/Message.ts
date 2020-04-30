@@ -21,6 +21,9 @@ export default class Message {
     send(content:string) {
         return this.channel?.send(content);
     }
+    edit(content:string) {
+        return this.client.fetch.edit(content, this);
+    } 
     reply(content: string) {
         return this.channel?.send(`<@${this.author.id}>, ${content}`)
     }

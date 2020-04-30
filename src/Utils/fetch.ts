@@ -3,6 +3,7 @@ import { END_POINTS } from '../constants';
 import { Client } from '..';
 import { User } from '../User';
 import Channel from '../Channel';
+import Message from '../Message';
 
 
 
@@ -24,17 +25,28 @@ export default class Fetch {
     }
 
     send(content: string, channel: Channel | User) {
+        let fetch: Promise<any>;
         if (channel instanceof User) {
-            return this.client.fetch.createDM(channel).then(chan =>
+            fetch = this.client.fetch.createDM(channel).then(chan =>
                 this.postJSON("post", END_POINTS.MESSAGES_CHANNELS_PATH + chan.id, {
                     message: content
                 })
             )
         } else {
-            return this.postJSON("post", END_POINTS.MESSAGES_CHANNELS_PATH + channel.id, {
+            fetch = this.postJSON("post", END_POINTS.MESSAGES_CHANNELS_PATH + channel.id, {
                 message: content
             })
         }
+        return fetch.then(data =>
+            new Message(data.messageCreated, this.client)
+        )
+    }
+    edit(content: string, message: Message) {
+        return this.postJSON("patch", `${END_POINTS.MESSAGES + message.id}/channels/${message.channel?.id}`, {
+            message: content
+        }).then(data => 
+            new Message(data, this.client)
+        )
     }
     createDM(recipient: User): Promise<Channel> {
         const channel = this.getExistingDM(recipient);
