@@ -3,7 +3,7 @@ import IUser from "./User";
 export default interface IAuthenticationData  {
     user: IUser & User
     serverMembers: ServerMembers[]
-    dms: DMs[];
+    dms: Channel[];
 }
 
 interface User {
@@ -21,13 +21,11 @@ interface Servers {
 interface Channel {
     name: string
     channelID: string
-    server_id: string
+    server_id?: string
+    recipients?: (IUser & User)[]
 }
 
 interface ServerMembers {
     type: string
     member: IUser & User
-}
-interface DMs {
-    recipients: (IUser & User)[]
 }

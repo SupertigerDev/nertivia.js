@@ -1,4 +1,4 @@
-import IUser from './Interfaces/User';
+import { Client } from "."
 
 export class User {
     username: string
@@ -6,11 +6,22 @@ export class User {
     avatar: string
     id: string
     discriminator: string
-    constructor(user: any) {
+    client: Client
+    constructor(user: any, client: Client) {
         this.username = user.username
         this.tag = `${user.username}:${user.tag}`
         this.avatar = user.avatar
         this.id = user.uniqueID
         this.discriminator = user.tag
+        this.client = client;
+    }
+    toString() {
+        return `<@${this.id}>`
+    }
+    createDM() {
+
+    }
+    send() {
+
     }
 }

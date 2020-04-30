@@ -8,6 +8,9 @@ import Message from './Message';
 import Channel from './Channel';
 import Users from './Users';
 import Channels from './Channels';
+import Guilds from './Guilds';
+import Guild from './Guild';
+import Fetch from './Utils/fetch';
 
 export class Client {
     token: string | null;
@@ -16,6 +19,8 @@ export class Client {
     socket: SocketIOClient.Socket;
     users: Users;
     channels: Channels;
+    guilds: Guilds;
+    fetch: Fetch;
     constructor() {
         this.token = null;
         this.user = null;
@@ -23,6 +28,8 @@ export class Client {
         this.socket = io('https://nertivia.supertiger.tk', { autoConnect: false });
         this.users = new Users(this);
         this.channels = new Channels(this);
+        this.guilds = new Guilds(this);
+        this.fetch = new Fetch(this);
     }
 
     login(token: string) {
@@ -40,32 +47,35 @@ export class Client {
                         username: data.user.username,
                         tag: data.user.tag,
                         avatar: data.user.avatar,
-                        id: data.user.uniqueID
-                    })
+                        id: data.user.uniqueID,
+                    }, this)
                     this.users.cache.set(this.user.id, this.user);
 
                     // get users
                     for (let index = 0; index < data.serverMembers.length; index++) {
                         const member = data.serverMembers[index].member;
-                        this.users.cache.set(member.uniqueID, new User(member))
+                        this.users.cache.set(member.uniqueID, new User(member, this))
                     }
 
+                    // get DM Channels + users
                     for (let index = 0; index < data.dms.length; index++) {
-                        const member = data.dms[index].recipients[0];
-                        this.users.cache.set(member.uniqueID, new User(member))
+                        const channel = data.dms[index];
+                        if (!channel.recipients) continue;
+                        const user = new User(channel.recipients[0], this);
+                        this.users.cache.set(user.id, user)
+                        this.channels.cache.set(channel.channelID, new Channel(channel , this)); 
                     }
 
-                    // get channels
+                    // get servers + channels
                     for (let index = 0; index < data.user.servers.length; index++) {
-                        const servers = data.user.servers[index];
-                        for (let index = 0; index < servers.channels.length; index++) {
-                            const channel = servers.channels[index];
+                        const server = data.user.servers[index];
+                        this.guilds.cache.set(server.server_id, new Guild(server, this));
+                        for (let index = 0; index < server.channels.length; index++) {
+                            const channel = server.channels[index];
                             this.channels.cache.set(channel.channelID, new Channel(channel, this));                            
                         }
-                        
+
                     }
-
-
 
                     const readyCB = this.listeners.get(clientEventsNames.ready);
                     if (readyCB) readyCB()
