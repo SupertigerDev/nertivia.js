@@ -28,4 +28,5 @@ interface Channel {
 interface ServerMembers {
     type: string
     member: IUser & User
+    server_id: string
 }

@@ -1,6 +1,7 @@
 import { Client } from ".";
 import Guild from "./Guild";
 import Channel from "./Channel";
+import { User } from "./User";
 
 export default class DataManager {
     client: Client
@@ -23,4 +24,11 @@ export default class DataManager {
             return undefined;
         }
     }
+    newUser(data: any) {
+        if (this.client.users.cache.has(data.uniqueID)) return this.client.users.cache.get(data.uniqueID);
+        const user = new User(data, this.client);
+        this.client.users.cache.set(user.id, user);
+        return user;
+    }
+
 }

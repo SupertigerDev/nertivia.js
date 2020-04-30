@@ -15,7 +15,7 @@ import DataManager from './DataManager';
 
 export class Client {
     token: string | null;
-    user: User | null;
+    user: User | undefined;
     listeners: Map<keyof IClientEvents | any, any>;
     socket: SocketIOClient.Socket;
     users: Users;
@@ -25,7 +25,7 @@ export class Client {
     dataManager: DataManager;
     constructor() {
         this.token = null;
-        this.user = null;
+        this.user = undefined;
         this.listeners = new Map();
         this.socket = io('https://nertivia.supertiger.tk', { autoConnect: false });
         this.users = new Users(this);
@@ -46,26 +46,15 @@ export class Client {
                 this.socket.once('success', (data: IAuthenticationData) => {
                     this.socket.off('auth_err')
                     resolve('Connected')
-                    this.user = new User({
-                        username: data.user.username,
-                        tag: data.user.tag,
-                        avatar: data.user.avatar,
-                        id: data.user.uniqueID,
-                    }, this)
-                    this.users.cache.set(this.user.id, this.user);
+                    this.user = this.dataManager.newUser(data.user)
+                    
 
-                    // get users
-                    for (let index = 0; index < data.serverMembers.length; index++) {
-                        const member = data.serverMembers[index].member;
-                        this.users.cache.set(member.uniqueID, new User(member, this))
-                    }
 
                     // get DM Channels + users
                     for (let index = 0; index < data.dms.length; index++) {
                         const channel = data.dms[index];
                         if (!channel.recipients) continue;
-                        const user = new User(channel.recipients[0], this);
-                        this.users.cache.set(user.id, user)
+                        this.dataManager.newUser(channel.recipients[0])
                         this.dataManager.newChannel(channel);
                     }
                     
@@ -79,6 +68,14 @@ export class Client {
                             this.dataManager.newChannel(channel)                 
                         }
 
+                    }
+
+                    // get server users
+                    for (let index = 0; index < data.serverMembers.length; index++) {
+                        const member = data.serverMembers[index];
+                        if (this.guilds.cache.has(member.server_id)) {
+                            this.guilds.cache.get(member.server_id)?._addMember(member);
+                        }
                     }
 
                     const readyCB = this.listeners.get(clientEventsNames.ready);
