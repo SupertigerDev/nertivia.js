@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Supertiger",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^13.13.4",
@@ -20,5 +20,16 @@
     "node-fetch": "^2.6.0",
     "socket.io-client": "^2.3.0",
     "socketio-wildcard": "^2.0.0"
-  }
+  },
+  "directories": {
+    "example": "examples"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/supertiger1234/nertivia.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/supertiger1234/nertivia.js/issues"
+  },
+  "homepage": "https://github.com/supertiger1234/nertivia.js#readme"
 }
