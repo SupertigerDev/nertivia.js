@@ -10,6 +10,9 @@ export default class ClientUser extends User {
         super(user, client);
     }
     setStatus(status: PresenceStatus) {
+        if (PresenceStatusData.indexOf(status) === -1) {
+            return Promise.reject("Invalid Status.")
+        }
         return this.client.fetch.setStatus(PresenceStatusData.indexOf(status)).then(() => {
             this.presence.status = status;
             return this.presence;
