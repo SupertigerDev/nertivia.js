@@ -17,7 +17,7 @@ Your token should print out.
 
 ## Usage
 
-NPM package coming soon!
+```npm i nertivia.js```
 
 ```js
 const Nertivia = require("nertivia.js");
