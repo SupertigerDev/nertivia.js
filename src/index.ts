@@ -1,11 +1,9 @@
 import io from 'socket.io-client';
 const socketIOWildcard = require('socketio-wildcard')(io.Manager);
 
-import { User } from './User';
 import IAuthenticationData from './Interfaces/AuthenticationData';
 import {IClientEvents, clientEventsNames} from './Interfaces/ClientEvents';
 import Message from './Message';
-import Channel from './Channel';
 import Users from './Users';
 import Channels from './Channels';
 import Guilds from './Guilds';
@@ -88,6 +86,13 @@ export class Client {
                             (this.users.cache.get(id) as any).presence.status = PresenceStatusData[parseInt(status)] as PresenceStatus;
                         }                        
                     }
+                    // get activity status
+                    for (let index = 0; index < data.customStatusArr.length; index++) {
+                        const [id, activity] = data.customStatusArr[index];
+                        if (this.users.cache.has(id)) {
+                            (this.users.cache.get(id) as any).presence.activity = activity
+                        }                        
+                    }
 
                     const readyCB = this.listeners.get(clientEventsNames.ready);
                     if (readyCB) readyCB()
@@ -101,6 +106,7 @@ export class Client {
                     const [event, data]: [any, any] = res.data;
                     if(Object.keys(events).includes(event)) {
                         const func: [string, any] = (events as any)[event](data, this)
+                        if (!func) { return;}
                         const cb = this.listeners.get(func[0]);
                         if (!cb) return;
                         cb(func[1])
@@ -123,5 +129,19 @@ export class Client {
 const events = {
     receiveMessage: (data:any, client: Client) => {
         return ["message", new Message(data.message, client)]
+    },
+    userStatusChange: (data: {uniqueID: string, status: any}, client: Client) => {
+        const presence = client.users.cache.get(data.uniqueID)?.presence
+        if (presence) {
+            presence.status = PresenceStatusData[parseInt(data.status)] as PresenceStatus
+            return ["presenceUpdate", presence]
+        }
+    },
+    ["member:custom_status_change"]: (data: {uniqueID: string, custom_status: string}, client: Client) => {
+        const presence = client.users.cache.get(data.uniqueID)?.presence
+        if (presence) {
+            presence.activity = data.custom_status
+            return ["presenceUpdate", presence]
+        }
     }
 }

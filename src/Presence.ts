@@ -6,15 +6,20 @@ export default class Presence {
     client: Client;
     status: PresenceStatus;
     user: User;
-    constructor(status: PresenceStatus | number, user: User, client: Client) {
+    activity: string | null;
+    constructor(status: PresenceStatus | number, activity: string | undefined, user: User, client: Client) {
         this.status = "invisible";
         this.user = user;
         this.client = client;
+        this.activity = null
 
-        if (typeof status ===  "number") {
+        if (typeof status === "number") {
             this.status = PresenceStatusData[status] as PresenceStatus;
         } else {
             this.status = status;
+        }
+        if (activity) {
+            this.activity = activity;
         }
     }
 }

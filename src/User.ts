@@ -18,7 +18,7 @@ export class User {
         this.id = user.uniqueID
         this.discriminator = user.tag
         this.client = client;
-        this.presence = new Presence("invisible", this, this.client);
+        this.presence = new Presence("invisible", user.custom_status, this, this.client);
 
         if (user.status) {
             this.presence.status = user.status

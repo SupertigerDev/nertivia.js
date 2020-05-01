@@ -44,7 +44,7 @@ export default class Fetch {
     edit(content: string, message: Message) {
         return this.postJSON("patch", `${END_POINTS.MESSAGES + message.id}/channels/${message.channel?.id}`, {
             message: content
-        }).then(data => 
+        }).then(data =>
             new Message(data, this.client)
         )
     }
@@ -63,6 +63,9 @@ export default class Fetch {
         )
     }
     setStatus(status: number) {
-        return this.postJSON("post", `${END_POINTS.SETTINGS}/status`, {status})
+        return this.postJSON("post", `${END_POINTS.SETTINGS}/status`, { status })
+    }
+    setActivity(content: string) {
+        return this.postJSON("post", `${END_POINTS.SETTINGS}/custom-status`, { custom_status: content })
     }
 }
