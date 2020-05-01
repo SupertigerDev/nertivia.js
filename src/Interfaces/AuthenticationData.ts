@@ -4,6 +4,7 @@ export default interface IAuthenticationData  {
     user: IUser & User
     serverMembers: ServerMembers[]
     dms: Channel[];
+    memberStatusArr: [[string, string]]
 }
 
 interface User {

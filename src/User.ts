@@ -1,4 +1,7 @@
 import { Client } from "."
+import { PresenceStatus, PresenceStatusData } from "./Interfaces/Status"
+import Presence from "./Presence"
+
 
 export class User {
     username: string
@@ -7,6 +10,7 @@ export class User {
     id: string
     discriminator: string
     client: Client
+    presence: Presence
     constructor(user: any, client: Client) {
         this.username = user.username
         this.tag = `${user.username}:${user.tag}`
@@ -14,6 +18,11 @@ export class User {
         this.id = user.uniqueID
         this.discriminator = user.tag
         this.client = client;
+        this.presence = new Presence("invisible", this, this.client);
+
+        if (user.status) {
+            this.presence.status = user.status
+        }
     }
     toString() {
         return `<@${this.id}>`

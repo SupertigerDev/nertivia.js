@@ -12,10 +12,12 @@ import Guilds from './Guilds';
 import Guild from './Guild';
 import Fetch from './Utils/fetch';
 import DataManager from './DataManager';
+import ClientUser from './ClientUser';
+import { PresenceStatusData, PresenceStatus } from './Interfaces/Status';
 
 export class Client {
     token: string | null;
-    user: User | undefined;
+    user: ClientUser | undefined;
     listeners: Map<keyof IClientEvents | any, any>;
     socket: SocketIOClient.Socket;
     users: Users;
@@ -46,7 +48,8 @@ export class Client {
                 this.socket.once('success', (data: IAuthenticationData) => {
                     this.socket.off('auth_err')
                     resolve('Connected')
-                    this.user = this.dataManager.newUser(data.user)
+                    this.dataManager.newUser(data.user)
+                    this.user = new ClientUser(data.user, this)
                     
 
 
@@ -76,6 +79,14 @@ export class Client {
                         if (this.guilds.cache.has(member.server_id)) {
                             this.guilds.cache.get(member.server_id)?._addMember(member);
                         }
+                    }
+
+                    // get presences
+                    for (let index = 0; index < data.memberStatusArr.length; index++) {
+                        const [id, status] = data.memberStatusArr[index];
+                        if (this.users.cache.has(id)) {
+                            (this.users.cache.get(id) as any).presence.status = PresenceStatusData[parseInt(status)] as PresenceStatus;
+                        }                        
                     }
 
                     const readyCB = this.listeners.get(clientEventsNames.ready);

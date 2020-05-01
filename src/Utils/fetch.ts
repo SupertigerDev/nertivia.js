@@ -62,4 +62,7 @@ export default class Fetch {
             channel.recipient?.id === user.id
         )
     }
+    setStatus(status: number) {
+        return this.postJSON("post", `${END_POINTS.SETTINGS}/status`, {status})
+    }
 }
