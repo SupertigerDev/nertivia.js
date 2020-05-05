@@ -25,7 +25,7 @@ export default class Guild {
     _addMember(data: any) {
         const user = this.client.dataManager.newUser(data.member);
         if (!user) return;
-        const sm = new ServerMember(this.client, {...data, user});
+        const sm = new ServerMember(this.client, this, { ...data, user });
         this.members.set(user.id, sm);
         return sm;
     }
