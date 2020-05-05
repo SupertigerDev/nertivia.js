@@ -143,5 +143,22 @@ const events = {
             presence.activity = data.custom_status
             return ["presenceUpdate", presence]
         }
+    },
+    ["server:member_add"]: (data: {serverMember: any, custom_status: string, presence: string}, client: Client) => {
+        if (client.guilds.cache.has(data.serverMember.server_id)) {
+            const clientPresence = client.users.cache.get(data.serverMember.member.uniqueID);
+            if (clientPresence) {
+                if (data.presence) clientPresence.presence.status = PresenceStatusData[parseInt(data.presence)] as PresenceStatus;
+                if (data.custom_status) clientPresence.presence.activity = data.custom_status;
+            }
+            return ["guildMemberAdd", client.guilds.cache.get(data.serverMember.server_id)?._addMember(data.serverMember)];
+        }
+    },
+    ["server:member_remove"]: (data: {uniqueID: string, server_id: string}, client: Client) => {
+        const guild = client.guilds.cache.get(data.server_id);
+        const member = guild?.members.get(data.uniqueID);
+        const memberClone =  Object.assign( Object.create( Object.getPrototypeOf(member)), member)
+        guild?.members.delete(data.uniqueID);
+        return ["guildMemberRemove", memberClone]
     }
 }

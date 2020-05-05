@@ -23,7 +23,6 @@ export default class Fetch {
             body: JSON.stringify(json)
         }).then(res => res.json())
     }
-
     send(content: string, channel: Channel | User) {
         let fetch: Promise<any>;
         if (channel instanceof User) {
@@ -40,6 +39,11 @@ export default class Fetch {
         return fetch.then(data =>
             new Message(data.messageCreated, this.client)
         )
+    }
+    deleteMessage(channel: Channel, message: Message) {
+        return this.postJSON('delete', END_POINTS.MESSAGES_PATH + `${message.id}/channels/${channel.id}`).then(() => {
+            return message
+        })
     }
     edit(content: string, message: Message) {
         return this.postJSON("patch", `${END_POINTS.MESSAGES + message.id}/channels/${message.channel?.id}`, {

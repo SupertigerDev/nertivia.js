@@ -27,4 +27,9 @@ export default class Message {
     reply(content: string) {
         return this.channel?.send(`<@${this.author.id}>, ${content}`)
     }
+    delete(delay: number = 0) {
+        setTimeout(() => {
+            return this.client.fetch.deleteMessage(this.channel!!, this);
+        }, delay);
+    }
 }
