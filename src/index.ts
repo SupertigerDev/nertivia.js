@@ -160,5 +160,11 @@ const events = {
         const memberClone =  Object.assign( Object.create( Object.getPrototypeOf(member)), member)
         guild?.members.delete(data.uniqueID);
         return ["guildMemberRemove", memberClone]
+    },
+    ["server:update_server"]: (data: {name: string, server_id:string}, client: Client) => {
+        if (data.name && client.guilds.cache.has(data.server_id)) { 
+            client.guilds.cache.get(data.server_id)!!.name = data.name
+        }
+
     }
 }
