@@ -161,9 +161,15 @@ const events = {
         guild?.members.delete(data.uniqueID);
         return ["guildMemberRemove", memberClone]
     },
-    ["server:update_server"]: (data: {name: string, server_id:string}, client: Client) => {
-        if (data.name && client.guilds.cache.has(data.server_id)) { 
-            client.guilds.cache.get(data.server_id)!!.name = data.name
+    ["server:update_server"]: (data: {name: string, server_id:string, avatar: string}, client: Client) => {
+        if (client.guilds.cache.has(data.server_id)) { 
+            const guild = client.guilds.cache.get(data.server_id);
+            if (data.name) {
+                guild!!.name = data.name
+            }
+            if (data.avatar) {
+                guild!!.icon = data.avatar
+            }
         }
 
     }

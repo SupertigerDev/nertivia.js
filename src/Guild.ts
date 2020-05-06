@@ -11,15 +11,16 @@ export default class Guild {
     channels: Collection<string, Channel>;
     members: Collection<string, ServerMember>;
     icon: string;
-    iconURL: string;
     constructor(server: any, client: Client) {
         this.id = server.server_id
         this.name = server.name
         this.icon = server.avatar
-        this.iconURL = END_POINTS.NERTIVIA_CDN + this.icon;
         this.channels = new Collection()
         this.members = new Collection()
         this.client = client
+    }
+    get iconURL(): string {
+        return END_POINTS.NERTIVIA_CDN + this.icon;
     }
 
     _addMember(data: any) {
