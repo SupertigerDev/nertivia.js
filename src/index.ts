@@ -172,5 +172,14 @@ const events = {
             }
         }
 
+    },
+    ["server:joined"]: (server: any, client: Client) => {
+        const guild = new Guild(server, client);
+        client.guilds.cache.set(server.server_id, guild);
+        for (let index = 0; index < server.channels.length; index++) {
+            const channel = server.channels[index];
+            client.dataManager.newChannel(channel, guild)   
+        }
+        return ["guildCreate", guild]              
     }
 }

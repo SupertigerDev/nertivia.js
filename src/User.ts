@@ -13,6 +13,7 @@ export class User {
     client: Client
     presence: Presence
     avatarURL: string;
+    bot: boolean;
     constructor(user: any, client: Client) {
         this.username = user.username
         this.tag = `${user.username}:${user.tag}`
@@ -22,7 +23,7 @@ export class User {
         this.discriminator = user.tag
         this.client = client;
         this.presence = new Presence("invisible", user.custom_status, this, this.client);
-
+        this.bot = !!user.bot
         if (user.status) {
             this.presence.status = user.status
         }
