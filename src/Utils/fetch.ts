@@ -15,8 +15,8 @@ export default class Fetch {
     }
     postJSON(method: string, path: string, json?: any) {
         if (!this.client.token) return Promise.reject(new Error("Token not provided."))
-        // return fetch(`https://supertiger.tk/${path}`, {
-        return fetch(`http://localhost/${path}`, {
+        return fetch(`https://supertiger.tk/${path}`, {
+        // return fetch(`http://localhost/${path}`, {
             method: method,
             headers: {
                 'authorization': this.client.token,

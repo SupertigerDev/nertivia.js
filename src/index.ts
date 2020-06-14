@@ -27,8 +27,8 @@ export class Client {
         this.token = null;
         this.user = undefined;
         this.listeners = new Map();
-        // this.socket = io('https://nertivia.supertiger.tk', { autoConnect: false });
-        this.socket = io('http://localhost/', { autoConnect: false });
+        this.socket = io('https://nertivia.supertiger.tk', { autoConnect: false });
+        // this.socket = io('http://localhost/', { autoConnect: false });
         this.users = new Users(this);
         this.channels = new Channels(this);
         this.guilds = new Guilds(this);
