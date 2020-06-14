@@ -4,6 +4,7 @@ import Channel from "./Channel";
 import Guild from "./Guild";
 import { User } from "./User";
 import ServerMember from "./ServerMember";
+import SendOptions from "./Interfaces/SendOptions";
 export default class Message {
     id: string;
     content: string;
@@ -21,14 +22,14 @@ export default class Message {
         this.member = this.guild?.members.get(message.creator.uniqueID) as any
         this.client = client;
     }
-    send(content:string) {
-        return this.channel?.send(content);
+    send(content:string, options: SendOptions = {}) {
+        return this.channel?.send(content, options);
     }
     edit(content:string) {
         return this.client.fetch.edit(content, this);
     } 
-    reply(content: string) {
-        return this.channel?.send(`<@${this.author.id}>, ${content}`)
+    reply(content: string, options: SendOptions = {}) {
+        return this.channel?.send(`<@${this.author.id}>, ${content}`, options)
     }
     delete(delay: number = 0) {
         setTimeout(() => {

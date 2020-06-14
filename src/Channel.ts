@@ -1,6 +1,7 @@
 import { Client } from ".";
 import Guild from './Guild'
 import { User } from "./User";
+import SendOptions from "./Interfaces/SendOptions";
 
 export default class Channel {
     id: string;
@@ -18,8 +19,8 @@ export default class Channel {
             this.recipient = this.client.users.cache.get(channel.recipients[0].uniqueID)
         }
     }
-    send(content:string) {
-        return this.client.fetch.send(content, this);
+    send(content:string, options: SendOptions = {}) {
+        return this.client.fetch.send(content, options, this);
     }
     toString() {
         return `<#${this.id}>`

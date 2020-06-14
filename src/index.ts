@@ -27,7 +27,8 @@ export class Client {
         this.token = null;
         this.user = undefined;
         this.listeners = new Map();
-        this.socket = io('https://nertivia.supertiger.tk', { autoConnect: false });
+        // this.socket = io('https://nertivia.supertiger.tk', { autoConnect: false });
+        this.socket = io('http://localhost/', { autoConnect: false });
         this.users = new Users(this);
         this.channels = new Channels(this);
         this.guilds = new Guilds(this);
@@ -105,18 +106,18 @@ export class Client {
                 this.socket.on('*', (res:any) => {
                     const [event, data]: [any, any] = res.data;
                     if(Object.keys(events).includes(event)) {
-                        const func: [string, any] = (events as any)[event](data, this)
+                        const func: [string, any, any?] = (events as any)[event](data, this)
                         if (!func) { return;}
                         const cb = this.listeners.get(func[0]);
                         if (!cb) return;
-                        cb(func[1])
+                        cb(func[1], typeof func[2] === "function" ? func[2](data, this) : undefined)
                     }
                 })
             })
         })
     }
 
-    on<T extends keyof IClientEvents>(type: T, callback: (arg: IClientEvents[T]) => void) {
+    on<T extends keyof IClientEvents>(type: T, callback: IClientEvents[T]) {
         if (this.listeners.get(type)) return;
         this.listeners.set(type, callback);
     }
@@ -181,5 +182,14 @@ const events = {
             client.dataManager.newChannel(channel, guild)   
         }
         return ["guildCreate", guild]              
+    },
+    ["message_button_clicked"]: (data: any, client: Client) => {
+        return ["messageButtonClicked", data, buttonDone]              
+    },
+}
+
+function buttonDone(data: any, client: Client) {
+    return function (message?: any) {
+        return client.fetch.messageButtonCallback(data.channelID, data.messageID, data.id, data.clickedByID, message)
     }
 }

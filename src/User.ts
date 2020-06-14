@@ -2,6 +2,7 @@ import { Client } from "."
 import { PresenceStatus, PresenceStatusData } from "./Interfaces/Status"
 import Presence from "./Presence"
 import {END_POINTS} from './constants';
+import SendOptions from "./Interfaces/SendOptions";
 
 
 export class User {
@@ -31,7 +32,7 @@ export class User {
     toString() {
         return `<@${this.id}>`
     }
-    send(content: string) {
-        this.client.fetch.send(content, this);
+    send(content: string, options: SendOptions = {}) {
+        this.client.fetch.send(content, options, this);
     }
 }

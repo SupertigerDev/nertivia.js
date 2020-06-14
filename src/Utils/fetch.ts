@@ -4,6 +4,7 @@ import { Client } from '..';
 import { User } from '../User';
 import Channel from '../Channel';
 import Message from '../Message';
+import SendOptions from '../Interfaces/SendOptions';
 
 
 
@@ -14,7 +15,8 @@ export default class Fetch {
     }
     postJSON(method: string, path: string, json?: any) {
         if (!this.client.token) return Promise.reject(new Error("Token not provided."))
-        return fetch(`https://supertiger.tk/${path}`, {
+        // return fetch(`https://supertiger.tk/${path}`, {
+        return fetch(`http://localhost/${path}`, {
             method: method,
             headers: {
                 'authorization': this.client.token,
@@ -23,7 +25,7 @@ export default class Fetch {
             body: JSON.stringify(json)
         }).then(res => res.json())
     }
-    send(content: string, channel: Channel | User) {
+    send(content: string, opts: SendOptions, channel: Channel | User) {
         let fetch: Promise<any>;
         if (channel instanceof User) {
             fetch = this.client.fetch.createDM(channel).then(chan =>
@@ -33,7 +35,8 @@ export default class Fetch {
             )
         } else {
             fetch = this.postJSON("post", END_POINTS.MESSAGES_CHANNELS_PATH + channel.id, {
-                message: content
+                message: content,
+                ...opts
             })
         }
         return fetch.then(data =>
@@ -71,5 +74,8 @@ export default class Fetch {
     }
     setActivity(content: string) {
         return this.postJSON("post", `${END_POINTS.SETTINGS}/custom-status`, { custom_status: content })
+    }
+    messageButtonCallback(channelID: string, messageID: string, buttonID: string, clickedByID: string, message?: string) {
+        return this.postJSON("patch", `${END_POINTS.CHANNELS_PATH}${channelID}/messages/${messageID}/button/${buttonID}`, { clickedByID, message })
     }
 }
