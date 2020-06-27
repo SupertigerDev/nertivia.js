@@ -2,7 +2,7 @@ import IUser from "./User";
 
 export default interface IAuthenticationData  {
     user: IUser & User
-    serverMembers: ServerMembers[]
+    serverMembers: ServerMember[]
     dms: Channel[];
     memberStatusArr: [[string, string]]
     customStatusArr: [[string, string]]
@@ -27,7 +27,7 @@ interface Channel {
     recipients?: (IUser & User)[]
 }
 
-interface ServerMembers {
+interface ServerMember {
     type: string
     member: IUser & User
     server_id: string

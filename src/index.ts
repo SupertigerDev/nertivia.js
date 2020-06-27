@@ -12,6 +12,7 @@ import Fetch from './Utils/fetch';
 import DataManager from './DataManager';
 import ClientUser from './ClientUser';
 import { PresenceStatusData, PresenceStatus } from './Interfaces/Status';
+import ServerMember from './ServerMember';
 
 export class Client {
     token: string | null;
@@ -74,25 +75,17 @@ export class Client {
 
                     // get server users
                     for (let index = 0; index < data.serverMembers.length; index++) {
-                        const member = data.serverMembers[index];
-                        if (this.guilds.cache.has(member.server_id)) {
-                            this.guilds.cache.get(member.server_id)?._addMember(member);
-                        }
+                        addServerMember(data.serverMembers[index], this);
                     }
 
                     // get presences
                     for (let index = 0; index < data.memberStatusArr.length; index++) {
-                        const [id, status] = data.memberStatusArr[index];
-                        if (this.users.cache.has(id)) {
-                            (this.users.cache.get(id) as any).presence.status = PresenceStatusData[parseInt(status)] as PresenceStatus;
-                        }                        
+                        setMemberPresence(data.memberStatusArr[index], this);
                     }
+
                     // get activity status
                     for (let index = 0; index < data.customStatusArr.length; index++) {
-                        const [id, activity] = data.customStatusArr[index];
-                        if (this.users.cache.has(id)) {
-                            (this.users.cache.get(id) as any).presence.activity = activity
-                        }                        
+                        setMemberActivityStatus(data.customStatusArr[index], this)          
                     }
 
                     const readyCB = this.listeners.get(clientEventsNames.ready);
@@ -125,6 +118,23 @@ export class Client {
     off<T extends keyof IClientEvents>(type: T) {
         this.listeners.delete(type);
     }
+}
+
+function addServerMember(member: any, client: Client) {
+    if (client.guilds.cache.has(member.server_id)) {
+        client.guilds.cache.get(member.server_id)?._addMember(member);
+    }
+}
+
+function setMemberPresence([id, status]: any, client: Client) {
+    if (client.users.cache.has(id)) {
+        (client.users.cache.get(id) as any).presence.status = PresenceStatusData[parseInt(status)] as PresenceStatus;
+    }  
+}
+function setMemberActivityStatus([id, activity]: any, client: Client) {
+    if (client.users.cache.has(id)) {
+        (client.users.cache.get(id) as any).presence.activity = activity
+    }   
 }
 
 const events = {
@@ -186,6 +196,20 @@ const events = {
     ["message_button_clicked"]: (data: any, client: Client) => {
         return ["messageButtonClicked", data, buttonDone]              
     },
+    ["server:members"]: (data: any, client: Client) => {
+        const { serverMembers, memberPresences, programActivityArr } = data;
+        for (let index = 0; index < serverMembers.length; index++) {
+            addServerMember(serverMembers[index], client);
+        }
+        for (let index = 0; index < memberPresences.length; index++) {
+            setMemberPresence(data.memberPresences[index], client);
+        }
+        for (let index = 0; index < programActivityArr.length; index++) {
+            setMemberActivityStatus(programActivityArr[index], client);            
+        }
+
+        return ["N/A"]
+    }
 }
 
 function buttonDone(data: any, client: Client) {
