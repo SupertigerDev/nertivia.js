@@ -1,4 +1,4 @@
-const Nertivia = require("../dist");
+const Nertivia = require("nertivia.js");
 const client = new Nertivia.Client();
 
 client.on("ready", () => {
@@ -23,4 +23,4 @@ client.on("message", msg => {
     }
 })
 
-client.login("NjY2NTI1NDQ0NzE4NDA4OTA4OC05.qK7BFebdVtslqKHtW-FHK-wv2CVkFjO8rdWIFvcb8mI")
+client.login("token")
