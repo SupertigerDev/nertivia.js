@@ -1,6 +1,6 @@
 {
   "name": "nertivia.js",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Nertivia Bot API",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@discordjs/collection": "^0.1.5",
+    "jsonhtmlfyer": "^0.1.0",
     "node-fetch": "^2.6.0",
     "socket.io-client": "^2.3.0",
     "socketio-wildcard": "^2.0.0"

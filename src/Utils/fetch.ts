@@ -13,17 +13,28 @@ export default class Fetch {
     constructor(client: Client) {
         this.client = client;
     }
-    postJSON(method: string, path: string, json?: any) {
+    postJSON(method: string, path: string, json?: any): Promise<any>{
         if (!this.client.token) return Promise.reject(new Error("Token not provided."))
-        return fetch(`https://supertiger.tk/${path}`, {
-        // return fetch(`http://localhost/${path}`, {
-            method: method,
-            headers: {
-                'authorization': this.client.token,
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(json)
-        }).then(res => res.json())
+
+        return new Promise((resolve, reject) => {
+            fetch(`https://supertiger.tk/${path}`, {
+            // fetch(`http://localhost/${path}`, {
+                method: method,
+                headers: {
+                    'authorization': this.client.token as string,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(json)
+            }).then(async res => {
+                if (res.ok) {
+                    resolve(await res.json())
+                } else {
+                    reject(await res.json())
+                }
+            })
+            .catch(err => { reject(err)})
+        })
+
     }
     send(content: string, opts: SendOptions, channel: Channel | User) {
         let fetch: Promise<any>;
