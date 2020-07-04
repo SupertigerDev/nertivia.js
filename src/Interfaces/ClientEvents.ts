@@ -12,6 +12,7 @@ export interface IClientEvents {
     guildMemberAdd: (serverMember: ServerMember) => {}
     guildMemberRemove: (serverMember: ServerMember) => {}
     guildCreate: (guild: Guild) => {}
+    error: (error: Error) => {}
     messageButtonClicked: (Button: MessageButton, done: (message?: string) => Promise<any>) => {}
 }
 
@@ -22,5 +23,6 @@ export enum clientEventsNames {
     guildMemberAdd = "server:member_add",
     guildMemberRemove = "server:member_remove",
     guildCreate = "server:joined",
-    messageButtonClicked = "message_button_clicked"
+    messageButtonClicked = "message_button_clicked",
+    error = "error"
 }

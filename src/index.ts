@@ -28,7 +28,7 @@ export class Client {
         this.token = null;
         this.user = undefined;
         this.listeners = new Map();
-        this.socket = io('https://nertivia.supertiger.tk', { autoConnect: false });
+        this.socket = io('https://nertivia.supertiger.tk', { autoConnect: true });
         // this.socket = io('http://localhost/', { autoConnect: false });
         this.users = new Users(this);
         this.channels = new Channels(this);
@@ -43,11 +43,12 @@ export class Client {
             this.token = token;
             this.socket.connect();
             socketIOWildcard(this.socket)
-            this.socket.once('connect', () => {
+            const connectEvent = () => {
+                this.socket.removeAllListeners();
                 this.socket.emit('authentication', {token})
                 this.socket.once('success', (data: IAuthenticationData) => {
+                    resolve("success");
                     this.socket.off('auth_err')
-                    resolve('Connected')
                     this.dataManager.newUser(data.user)
                     this.user = new ClientUser(data.user, this)
                     
@@ -90,11 +91,17 @@ export class Client {
 
                     const readyCB = this.listeners.get(clientEventsNames.ready);
                     if (readyCB) readyCB()
-                    resolve("Success.")
                 })
                 this.socket.once("auth_err", (data: string) => {
                     reject(new Error(data));
                     this.socket.removeAllListeners();
+                })
+                this.socket.on("disconnect", () => {
+                    const cb = this.listeners.get(clientEventsNames.error);
+                    if (cb) cb(new Error("Connection Lost."))
+                    else throw new Error("Connection Lost.")
+                    this.socket.removeAllListeners();
+                    this.socket.on('connect', connectEvent);
                 })
                 this.socket.on('*', (res:any) => {
                     const [event, data]: [any, any] = res.data;
@@ -106,7 +113,8 @@ export class Client {
                         cb(func[1], typeof func[2] === "function" ? func[2](data, this) : undefined)
                     }
                 })
-            })
+            }
+            this.socket.on('connect', connectEvent);
         })
     }
 
