@@ -9,10 +9,10 @@ export default class Message {
     id: string;
     content: string;
     author: User;
-    channel: Channel | undefined;
-    guild: Guild | undefined;
+    channel: Channel | null;
+    guild: Guild | null;
     client: Client;
-    member: ServerMember | undefined;
+    member: ServerMember | null;
     constructor(message: any, client: Client) {
         this.id = message.messageID;
         this.content = message.message;
