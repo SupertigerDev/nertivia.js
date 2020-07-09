@@ -13,6 +13,10 @@ import DataManager from './DataManager';
 import ClientUser from './ClientUser';
 import { PresenceStatusData, PresenceStatus } from './Interfaces/Status';
 import ServerMember from './ServerMember';
+import _HTMLEmbedBuilder from './HTMLEmbedBuilder';
+
+export const HTMLEmbedBuilder = _HTMLEmbedBuilder;
+export type HTMLEmbedBuilder = _HTMLEmbedBuilder;
 
 export class Client {
     token: string | null;

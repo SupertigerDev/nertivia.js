@@ -5,6 +5,8 @@ import { User } from '../User';
 import Channel from '../Channel';
 import Message from '../Message';
 import SendOptions from '../Interfaces/SendOptions';
+import HTMLEmbedBuilder from '../HTMLEmbedBuilder';
+import { JsonInput } from 'jsonhtmlfyer';
 
 
 
@@ -38,6 +40,9 @@ export default class Fetch {
     }
     send(content: string, opts: SendOptions, channel: Channel | User) {
         let fetch: Promise<any>;
+        if (opts.htmlEmbed && opts.htmlEmbed instanceof HTMLEmbedBuilder) {
+            opts.htmlEmbed = (opts.htmlEmbed.obj as JsonInput)
+        }
         if (channel instanceof User) {
             fetch = this.client.fetch.createDM(channel).then(chan =>
                 this.postJSON("post", END_POINTS.MESSAGES_CHANNELS_PATH + chan.id, {
