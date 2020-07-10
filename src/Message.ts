@@ -4,6 +4,7 @@ import Channel from "./Channel";
 import Guild from "./Guild";
 import { User } from "./User";
 import ServerMember from "./ServerMember";
+import MessageMentions from "./MessageMentions";
 import SendOptions from "./Interfaces/SendOptions";
 export default class Message {
     id: string;
@@ -13,6 +14,7 @@ export default class Message {
     guild: Guild | undefined;
     client: Client;
     member: ServerMember | undefined;
+    mentions: MessageMentions;
     constructor(message: any, client: Client) {
         this.id = message.messageID;
         this.content = message.message;
@@ -21,6 +23,7 @@ export default class Message {
         this.guild = this.channel?.guild;
         this.member = this.guild?.members.get(message.creator.uniqueID) as any
         this.client = client;
+        this.mentions = new MessageMentions(this, this.client)
     }
     send(content:string, options: SendOptions = {}) {
         return this.channel?.send(content, options);
