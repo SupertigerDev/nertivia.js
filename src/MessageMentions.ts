@@ -12,6 +12,7 @@ export default class MessageMentions {
         this.members = new Collection();
         this.users = new Collection();
 
+        if (!message.content) return;
         const reg = /<@([\d]+)>/g
         const result = message.content.match(reg);
         if (!result) return;

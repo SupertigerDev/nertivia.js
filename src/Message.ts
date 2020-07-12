@@ -8,7 +8,7 @@ import MessageMentions from "./MessageMentions";
 import SendOptions from "./Interfaces/SendOptions";
 export default class Message {
     id: string;
-    content: string;
+    content?: string;
     author: User;
     channel: Channel | undefined;
     guild: Guild | undefined;
