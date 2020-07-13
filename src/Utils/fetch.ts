@@ -46,7 +46,8 @@ export default class Fetch {
         if (channel instanceof User) {
             fetch = this.client.fetch.createDM(channel).then(chan =>
                 this.postJSON("post", END_POINTS.MESSAGES_CHANNELS_PATH + chan.id, {
-                    message: content
+                    message: content,
+                    ...opts
                 })
             )
         } else {
