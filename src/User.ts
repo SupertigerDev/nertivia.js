@@ -33,6 +33,6 @@ export class User {
         return `<@${this.id}>`
     }
     send(content: string, options: SendOptions = {}) {
-        this.client.fetch.send(content, options, this);
+        return this.client.fetch.send(content, options, this);
     }
 }

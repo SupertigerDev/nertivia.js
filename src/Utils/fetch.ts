@@ -65,9 +65,10 @@ export default class Fetch {
             return message
         })
     }
-    edit(content: string, message: Message) {
+    edit(content: string, opts: SendOptions, message: Message) {
         return this.postJSON("patch", `${END_POINTS.MESSAGES + message.id}/channels/${message.channel?.id}`, {
-            message: content
+            message: content,
+            ...opts
         }).then(data =>
             new Message(data, this.client)
         )

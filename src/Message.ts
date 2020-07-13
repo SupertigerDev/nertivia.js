@@ -28,8 +28,8 @@ export default class Message {
     send(content:string, options: SendOptions = {}) {
         return this.channel?.send(content, options);
     }
-    edit(content:string) {
-        return this.client.fetch.edit(content, this);
+    edit(content:string, options: SendOptions = {}) {
+        return this.client.fetch.edit(content, options, this);
     } 
     reply(content: string, options: SendOptions = {}) {
         return this.channel?.send(`<@${this.author.id}>, ${content}`, options)
