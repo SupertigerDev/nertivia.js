@@ -7,7 +7,9 @@ import Message from '../Message';
 import SendOptions from '../Interfaces/SendOptions';
 import HTMLEmbedBuilder from '../HTMLEmbedBuilder';
 import { JsonInput } from 'jsonhtmlfyer';
-
+import CreateRole from '../Interfaces/CreateRole'
+import Guild from '../Guild';
+import Role from '../Role';
 
 
 export default class Fetch {
@@ -95,5 +97,11 @@ export default class Fetch {
     }
     messageButtonCallback(channelID: string, messageID: string, buttonID: string, clickedByID: string, message?: string) {
         return this.postJSON("patch", `${END_POINTS.CHANNELS_PATH}${channelID}/messages/${messageID}/button/${buttonID}`, { clickedByID, message })
+    }
+    createRole(opts: CreateRole, guild: Guild) {
+        return this.postJSON('post', `${END_POINTS.SERVERS_PATH}${guild.id}/roles`, opts.data);        
+    }
+    updateRole(opts: any, role: Role, guild: Guild) {
+        return this.postJSON('patch', `${END_POINTS.SERVERS_PATH}${guild.id}/roles/${role.id}`, opts);        
     }
 }

@@ -3,6 +3,7 @@ import Collection from "@discordjs/collection";
 import Channel from './Channel'
 import ServerMember from './ServerMember'
 import { END_POINTS } from "./constants";
+import RolesManager from "./RolesManager";
 
 export default class Guild {
     id: string;
@@ -11,6 +12,7 @@ export default class Guild {
     channels: Collection<string, Channel>;
     members: Collection<string, ServerMember>;
     icon: string;
+    roles: RolesManager;
     constructor(server: any, client: Client) {
         this.id = server.server_id
         this.name = server.name
@@ -18,6 +20,7 @@ export default class Guild {
         this.channels = new Collection()
         this.members = new Collection()
         this.client = client
+        this.roles = new RolesManager(this);
     }
     get iconURL(): string {
         return END_POINTS.NERTIVIA_CDN + this.icon;
@@ -30,6 +33,5 @@ export default class Guild {
         this.members.set(user.id, sm);
         return sm;
     }
-
 
 }

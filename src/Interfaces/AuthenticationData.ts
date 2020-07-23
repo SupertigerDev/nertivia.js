@@ -5,7 +5,17 @@ export default interface IAuthenticationData  {
     serverMembers: ServerMember[]
     dms: Channel[];
     memberStatusArr: [[string, string]]
-    customStatusArr: [[string, string]]
+    customStatusArr: [[string, string]],
+    serverRoles: ServerRoles[]
+}
+interface ServerRoles {
+    name: string,
+    permissions: number,
+    deletable: boolean,
+    id: string,
+    server_id: string,
+    order: number,
+    color: string
 }
 
 interface User {

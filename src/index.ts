@@ -14,6 +14,7 @@ import ClientUser from './ClientUser';
 import { PresenceStatusData, PresenceStatus } from './Interfaces/Status';
 import ServerMember from './ServerMember';
 import _HTMLEmbedBuilder from './HTMLEmbedBuilder';
+import Role from './Role';
 
 export const HTMLEmbedBuilder = _HTMLEmbedBuilder;
 export type HTMLEmbedBuilder = _HTMLEmbedBuilder;
@@ -93,6 +94,11 @@ export class Client {
                         setMemberActivityStatus(data.customStatusArr[index], this)          
                     }
 
+                    // get roles
+                    for (let index = 0; index < data.serverRoles.length; index++) {
+                        addServerRoles(data.serverRoles[index], this);
+                    }
+
                     const readyCB = this.listeners.get(clientEventsNames.ready);
                     if (readyCB) readyCB()
                 })
@@ -129,6 +135,13 @@ export class Client {
     
     off<T extends keyof IClientEvents>(type: T) {
         this.listeners.delete(type);
+    }
+}
+
+function addServerRoles(role: any, client: Client) {
+    const guild = client.guilds.cache.get(role.server_id);
+    if (guild) {
+        guild.roles.cache.set(role.id, new Role(role, guild))
     }
 }
 
@@ -207,6 +220,24 @@ const events = {
     },
     ["message_button_clicked"]: (data: any, client: Client) => {
         return ["messageButtonClicked", data, buttonDone]              
+    },
+    ["server:update_role"]: (data: any, client: Client) => {
+        const guild = client.guilds.cache.get(data.server_id);
+        if (!guild) return;
+        const role = guild.roles.cache.get(data.id);
+        if (!role) return;
+        role.permissions = data.permissions || role.permissions;
+        role.color = data.color || role.color;
+        role.name = data.name || role.name;
+        return ["roleUpdate", role];         
+    },
+    ["server:create_role"]: (data: any, client: Client) => {
+        const guild = client.guilds.cache.get(data.server_id);
+        if (!guild) return;
+        if (guild.roles.cache.has(data.id)) return;
+        const role = new Role(data, guild);
+        guild.roles.cache.set(data.id, role);
+        return ["roleCreate", role];         
     },
     ["server:members"]: (data: any, client: Client) => {
         const { serverMembers, memberPresences, programActivityArr } = data;
