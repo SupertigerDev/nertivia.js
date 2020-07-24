@@ -7,16 +7,16 @@ import MessageButton from "./MessageButton";
 import Role from "../Role";
 
 export interface IClientEvents {
-    ready?: () => {};
-    message: (message:Message) => {}
-    presenceUpdate: (presence: Presence) => {}
-    guildMemberAdd: (serverMember: ServerMember) => {}
-    guildMemberRemove: (serverMember: ServerMember) => {}
-    guildCreate: (guild: Guild) => {}
-    error: (error: Error) => {}
-    messageButtonClicked: (Button: MessageButton, done: (message?: string) => Promise<any>) => {}
-    roleUpdate: (role: Role) => {}
-    roleCreate: (role: Role) => {}
+    ready?: () => void
+    message: (message:Message) => void
+    presenceUpdate: (presence: Presence) => void
+    guildMemberAdd: (serverMember: ServerMember) => void
+    guildMemberRemove: (serverMember: ServerMember) => void
+    guildCreate: (guild: Guild) => void
+    error: (error: Error) => void
+    messageButtonClicked: (Button: MessageButton, done: (message?: string) => Promise<any>) => void
+    roleUpdate: (role: Role) => void
+    roleCreate: (role: Role) => void
 }
 
 export enum clientEventsNames {
