@@ -216,7 +216,7 @@ const events = {
             const channel = server.channels[index];
             client.dataManager.newChannel(channel, guild)   
         }
-        return ["guildCreate", guild]              
+        return ["N/A"]              
     },
     ["message_button_clicked"]: (data: any, client: Client) => {
         return ["messageButtonClicked", data, buttonDone]              
@@ -251,6 +251,17 @@ const events = {
             setMemberActivityStatus(programActivityArr[index], client);            
         }
 
+        // guild create is used here since members is a seperate event 
+        // and members array would be empty if used properly.
+        const guild = client.guilds.cache.get(serverMembers[0].server_id)
+        if (guild) {
+            return ["guildCreate", guild]
+        }
+    },
+    ["server:roles"]: (data: any, client: Client) => {
+        for (let i = 0; i < data.roles.length; i++) {
+            addServerRoles(data.roles[i], client);
+        }
         return ["N/A"]
     }
 }
