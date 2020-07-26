@@ -17,6 +17,7 @@ export interface IClientEvents {
     messageButtonClicked: (Button: MessageButton, done: (message?: string) => Promise<any>) => void
     roleUpdate: (role: Role) => void
     roleCreate: (role: Role) => void
+    guildDelete: (guild: Guild) => void
 }
 
 export enum clientEventsNames {
@@ -29,5 +30,6 @@ export enum clientEventsNames {
     messageButtonClicked = "message_button_clicked",
     error = "error",
     roleUpdate = "server:update_role",
-    roleCreate = "server:create_role"
+    roleCreate = "server:create_role",
+    guildDelete = "server:leave"
 }

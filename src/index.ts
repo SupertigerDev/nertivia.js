@@ -218,6 +218,13 @@ const events = {
         }
         return ["N/A"]              
     },
+    ["server:leave"]: (data: any, client: Client) => {
+        const guild = client.guilds.cache.get(data.server_id);
+        if (guild) {
+            client.guilds.cache.delete(data.server_id)
+        }
+        return ["guildDelete", guild]              
+    },
     ["message_button_clicked"]: (data: any, client: Client) => {
         return ["messageButtonClicked", data, buttonDone]              
     },
