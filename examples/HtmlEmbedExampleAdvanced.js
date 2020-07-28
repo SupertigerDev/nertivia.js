@@ -29,11 +29,11 @@ client.on("message", msg => {
                         },
                         {
                             tag: "div",
-                            content: "`!mute` - Mutes a person"
+                            content: "``!mute`` - Mutes a person"
                         },
                         {
                             tag: "div",
-                            content: "`!unmute` - Unmutes a person"
+                            content: "``!unmute`` - Unmutes a person"
                         }
                     ]
                 }
