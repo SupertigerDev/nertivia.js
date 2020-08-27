@@ -19,6 +19,8 @@ import Role from './Role';
 export const HTMLEmbedBuilder = _HTMLEmbedBuilder;
 export type HTMLEmbedBuilder = _HTMLEmbedBuilder;
 
+export { default as Collection } from  '@discordjs/collection'
+
 export class Client {
     token: string | null;
     user: ClientUser | undefined;
