@@ -12,20 +12,20 @@
   "author": "Supertiger",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^14.0.27",
+    "@types/node": "^14.11.2",
     "@types/node-fetch": "^2.5.7",
     "@types/socket.io-client": "^1.4.33",
     "@types/socketio-wildcard": "^2.0.3",
-    "@typescript-eslint/eslint-plugin": "^3.8.0",
-    "@typescript-eslint/parser": "^3.8.0",
-    "eslint-plugin-jsdoc": "^30.2.1",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "eslint-plugin-jsdoc": "^30.5.3",
     "standardx": "^5.0.0",
     "typescript": "^3.9.7"
   },
   "dependencies": {
     "@discordjs/collection": "^0.1.6",
     "jsonhtmlfyer": "^0.2.0",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.1",
     "socket.io-client": "^2.3.0",
     "socketio-wildcard": "^2.0.0"
   },
