@@ -16,4 +16,10 @@ export default class ServerMember {
     toString() {
         return `<@${this.user.id}>`
     }
+    kick() {
+        return this.client.fetch.kickMember(this.guild, this.user.id);
+    }
+    ban() {
+        return this.client.fetch.banMember(this.guild, this.user.id);
+    }
 } 

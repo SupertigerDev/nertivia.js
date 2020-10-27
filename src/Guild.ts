@@ -26,6 +26,16 @@ export default class Guild {
         return END_POINTS.NERTIVIA_CDN + this.icon;
     }
 
+    kick(id: string) {
+        return this.client.fetch.kickMember(this, id);
+    }
+    ban(id: string) {
+        return this.client.fetch.banMember(this, id);
+    }
+    unban(id: string) {
+        return this.client.fetch.unbanMember(this, id);
+    }
+
     _addMember(data: any) {
         const user = this.client.dataManager.newUser(data.member);
         if (!user) return;

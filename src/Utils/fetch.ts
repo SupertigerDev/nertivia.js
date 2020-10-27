@@ -104,4 +104,13 @@ export default class Fetch {
     updateRole(opts: any, role: Role, guild: Guild) {
         return this.postJSON('patch', `${END_POINTS.SERVERS_PATH}${guild.id}/roles/${role.id}`, opts);        
     }
+    kickMember(guild: Guild, id: string) {
+        return this.postJSON('delete', `${END_POINTS.SERVERS_PATH}${guild.id}/members/${id}`)
+    }
+    banMember(guild: Guild, id: string){
+        return this.postJSON('put', `${END_POINTS.SERVERS_PATH}${guild.id}/bans/${id}`)
+    }
+    unbanMember(guild: Guild, id: string) {
+        return this.postJSON('delete', `${END_POINTS.SERVERS_PATH}${guild.id}/bans/${id}`)
+    }
 }
