@@ -13,8 +13,8 @@ client.on("message", msg => {
                 tag: "div",
                 content: [
                     {tag: "span", content: "Check out my epic website at "},
-                    {tag: "a", attributes: {href: "https://nertivia.tk"}, content: "https://nertivia.tk"},
-                    {tag: "img", attributes: {src: "https://nertivia.supertiger.tk/img/Graphic.31411f05.webp"}, styles: {height: "100px", width: "auto"}}
+                    {tag: "a", attributes: {href: "https://nertivia.net"}, content: "https://nertivia.net"},
+                    {tag: "img", attributes: {src: "https://nertivia.net/img/Graphic.31411f05.webp"}, styles: {height: "100px", width: "auto"}}
                 ]
             }
         }).catch(e => {

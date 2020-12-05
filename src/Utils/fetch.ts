@@ -21,7 +21,7 @@ export default class Fetch {
         if (!this.client.token) return Promise.reject(new Error("Token not provided."))
 
         return new Promise((resolve, reject) => {
-            fetch(`https://supertiger.tk/${path}`, {
+            fetch(`https://nertivia.net/${path}`, {
             // fetch(`http://localhost/${path}`, {
                 method: method,
                 headers: {

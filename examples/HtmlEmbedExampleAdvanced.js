@@ -12,7 +12,7 @@ client.on("message", msg => {
             htmlEmbed: {
                 tag: "div",
                 styles: {
-                    backgroundImage: "https://media.nertivia.tk/763085785093499319/6685239856559296512/pink_sunset.webp",
+                    backgroundImage: "https://media.nertivia.net/763085785093499319/6685239856559296512/pink_sunset.webp",
                     backgroundSize: "100%",
                     backgroundPosition: "center"
                 },
