@@ -10,6 +10,8 @@ import { JsonInput } from 'jsonhtmlfyer';
 import CreateRole from '../Interfaces/CreateRole'
 import Guild from '../Guild';
 import Role from '../Role';
+import { RolePermissionsEnum } from '../constants/RolePermissions';
+import { addPerm } from './permissionUtils';
 
 
 export default class Fetch {
@@ -99,7 +101,20 @@ export default class Fetch {
         return this.postJSON("patch", `${END_POINTS.CHANNELS_PATH}${channelID}/messages/${messageID}/button/${buttonID}`, { clickedByID, message })
     }
     createRole(opts: CreateRole, guild: Guild) {
-        return this.postJSON('post', `${END_POINTS.SERVERS_PATH}${guild.id}/roles`, opts.data);        
+        const postData = {
+            name: opts.data.name,
+            color: opts.data.color,
+            permissions: 0,
+        };
+        // set role permissions
+        if (opts.data.permissions?.length) {
+            let perms = 0;
+            opts.data.permissions.forEach(v => {
+               perms =  addPerm(perms, RolePermissionsEnum[v]);
+            })
+            postData.permissions = perms;
+        }
+        return this.postJSON('post', `${END_POINTS.SERVERS_PATH}${guild.id}/roles`, postData);        
     }
     updateRole(opts: any, role: Role, guild: Guild) {
         return this.postJSON('patch', `${END_POINTS.SERVERS_PATH}${guild.id}/roles/${role.id}`, opts);        

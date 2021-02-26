@@ -3,7 +3,7 @@ import {Client} from "."
 import CreateRole from './Interfaces/CreateRole'
 import Collection from "@discordjs/collection";
 import Role from "./Role";
-export default class RolesManager{
+export default class GuildRolesManager{
     guild: Guild;
     client: Client
     cache: Collection<string, Role>;

@@ -1,17 +1,20 @@
 import { User } from "./User";
 import { Client } from ".";
 import Guild from "./Guild";
+import MemberRolesManager from "./MemberRolesManager";
 
 export default class ServerMember {
     user: User;
     client: Client;
     type: string;
     guild: Guild;
+    roles: MemberRolesManager;
     constructor(client: Client, guild: Guild, member: any) {
         this.guild = guild;
         this.user = member.user;
         this.type = member.type;
         this.client = client;
+        this.roles = new MemberRolesManager(this.guild, this);
     }
     toString() {
         return `<@${this.user.id}>`

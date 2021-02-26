@@ -3,7 +3,7 @@ import Collection from "@discordjs/collection";
 import Channel from './Channel'
 import ServerMember from './ServerMember'
 import { END_POINTS } from "./constants";
-import RolesManager from "./RolesManager";
+import RolesManager from "./GuildRolesManager";
 
 export default class Guild {
     id: string;

@@ -1,9 +1,8 @@
 import Guild from "./Guild";
 import { Client } from '.'
 import IRolePermissions from "./Interfaces/IRolePermissions";
-import {RolePermissions} from "./constants/RolePermissions";
-import { stat } from "fs";
-export default class Role {
+import {RolePermissionsEnum, RoleType} from "./constants/RolePermissions";
+export default class GuildRole {
     guild: Guild;
     client: Client;
     color: string;
@@ -27,9 +26,9 @@ export default class Role {
         const removePerm = (flag: number) => perms &= ~flag;
         const newPermsKeys = Object.keys(newPerms);
         for (let index = 0; index < newPermsKeys.length; index++) {
-            const permName: string = newPermsKeys[index];
-            let status = (newPerms as any)[permName];            
-            let flag = RolePermissions[permName];
+            const permName: RoleType = newPermsKeys[index] as any;
+            let status = newPerms       
+            let flag = RolePermissionsEnum[permName];
             
             if (status) addPerm(flag)
             else removePerm(flag);
