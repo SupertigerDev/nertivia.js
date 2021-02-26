@@ -12,6 +12,7 @@ import Guild from '../Guild';
 import Role from '../Role';
 import { RolePermissionsEnum } from '../constants/RolePermissions';
 import { addPerm } from './permissionUtils';
+import ServerMember from '../ServerMember';
 
 
 export default class Fetch {
@@ -127,5 +128,11 @@ export default class Fetch {
     }
     unbanMember(guild: Guild, id: string) {
         return this.postJSON('delete', `${END_POINTS.SERVERS_PATH}${guild.id}/bans/${id}`)
+    }
+    addRoleToMember(guild: Guild, member: ServerMember,role: Role) {
+        return this.postJSON('patch', `${END_POINTS.SERVERS_PATH}${guild.id}/members/${member.user.id}/roles/${role.id}`)
+    }
+    removeRoleFromMember(guild: Guild, member: ServerMember,role: Role) {
+        return this.postJSON('delete', `${END_POINTS.SERVERS_PATH}${guild.id}/members/${member.user.id}/roles/${role.id}`)
     }
 }

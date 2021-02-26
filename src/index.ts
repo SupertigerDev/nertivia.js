@@ -81,6 +81,11 @@ export class Client {
 
                     }
 
+                    // get roles
+                    for (let index = 0; index < data.serverRoles.length; index++) {
+                        addServerRoles(data.serverRoles[index], this);
+                    }
+
                     // get server users
                     for (let index = 0; index < data.serverMembers.length; index++) {
                         addServerMember(data.serverMembers[index], this);
@@ -96,10 +101,7 @@ export class Client {
                         setMemberActivityStatus(data.customStatusArr[index], this)          
                     }
 
-                    // get roles
-                    for (let index = 0; index < data.serverRoles.length; index++) {
-                        addServerRoles(data.serverRoles[index], this);
-                    }
+      
 
                     const readyCB = this.listeners.get(clientEventsNames.ready);
                     if (readyCB) readyCB()

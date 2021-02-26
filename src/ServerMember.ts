@@ -14,7 +14,7 @@ export default class ServerMember {
         this.user = member.user;
         this.type = member.type;
         this.client = client;
-        this.roles = new MemberRolesManager(this.guild, this);
+        this.roles = new MemberRolesManager(this.guild, this, member.roles);
     }
     toString() {
         return `<@${this.user.id}>`

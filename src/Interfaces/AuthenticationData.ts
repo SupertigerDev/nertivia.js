@@ -41,4 +41,5 @@ interface ServerMember {
     type: string
     member: IUser & User
     server_id: string
+    roles: string[];
 }
