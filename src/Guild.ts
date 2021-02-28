@@ -13,7 +13,7 @@ export default class Guild {
     members: Collection<string, ServerMember>;
     icon: string;
     roles: RolesManager;
-    private _defaultChannelId: string;
+    _defaultChannelId: string;
     constructor(server: any, client: Client) {
         this.id = server.server_id
         this.name = server.name

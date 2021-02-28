@@ -18,6 +18,7 @@ export interface IClientEvents {
     roleUpdate: (role: Role) => void
     roleCreate: (role: Role) => void
     guildDelete: (guild: Guild) => void
+    guildUpdate: (guild: Guild) => void
 }
 
 export enum clientEventsNames {
@@ -31,5 +32,6 @@ export enum clientEventsNames {
     error = "error",
     roleUpdate = "server:update_role",
     roleCreate = "server:create_role",
-    guildDelete = "server:leave"
+    guildDelete = "server:leave",
+    guildUpdate = "server:update_server"
 }
