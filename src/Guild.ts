@@ -13,6 +13,7 @@ export default class Guild {
     members: Collection<string, ServerMember>;
     icon: string;
     roles: RolesManager;
+    private _defaultChannelId: string;
     constructor(server: any, client: Client) {
         this.id = server.server_id
         this.name = server.name
@@ -21,11 +22,14 @@ export default class Guild {
         this.members = new Collection()
         this.client = client
         this.roles = new RolesManager(this);
+        this._defaultChannelId = server.default_channel_id
     }
     get iconURL(): string {
         return END_POINTS.NERTIVIA_CDN + this.icon;
     }
-
+    get defaultChannel() {
+        return this.channels.get(this._defaultChannelId);
+    }
     kick(id: string) {
         return this.client.fetch.kickMember(this, id);
     }
