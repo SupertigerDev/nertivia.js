@@ -4,6 +4,7 @@ import Guild from "./Guild";
 import MemberRolesManager from "./MemberRolesManager";
 
 export default class ServerMember {
+    id: string
     user: User;
     client: Client;
     type: string;
@@ -12,6 +13,7 @@ export default class ServerMember {
     constructor(client: Client, guild: Guild, member: any) {
         this.guild = guild;
         this.user = member.user;
+        this.id = member.user.id;
         this.type = member.type;
         this.client = client;
         this.roles = new MemberRolesManager(this.guild, this, member.roles);

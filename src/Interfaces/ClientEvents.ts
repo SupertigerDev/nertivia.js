@@ -5,6 +5,7 @@ import ServerMember from "../ServerMember";
 import Guild from "../Guild";
 import MessageButton from "./MessageButton";
 import Role from "../Role";
+import Button from "../Button";
 
 export interface IClientEvents {
     ready?: () => void
@@ -14,7 +15,7 @@ export interface IClientEvents {
     guildMemberRemove: (serverMember: ServerMember) => void
     guildCreate: (guild: Guild) => void
     error: (error: Error) => void
-    messageButtonClicked: (Button: MessageButton, done: (message?: string) => Promise<any>) => void
+    messageButtonClicked: (Button: Button, done: (message?: string) => Promise<any>) => void
     roleUpdate: (role: Role) => void
     roleCreate: (role: Role) => void
     guildDelete: (guild: Guild) => void

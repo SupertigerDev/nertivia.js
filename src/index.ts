@@ -15,6 +15,7 @@ import { PresenceStatusData, PresenceStatus } from './Interfaces/Status';
 import ServerMember from './ServerMember';
 import _HTMLEmbedBuilder from './HTMLEmbedBuilder';
 import Role from './Role';
+import Button from './Button';
 
 export const HTMLEmbedBuilder = _HTMLEmbedBuilder;
 export type HTMLEmbedBuilder = _HTMLEmbedBuilder;
@@ -234,7 +235,7 @@ const events = {
         return ["guildDelete", guild]              
     },
     ["message_button_clicked"]: (data: any, client: Client) => {
-        return ["messageButtonClicked", data, buttonDone]              
+        return ["messageButtonClicked", new Button(data, client), buttonDone]              
     },
     ["server:update_role"]: (data: any, client: Client) => {
         const guild = client.guilds.cache.get(data.server_id);

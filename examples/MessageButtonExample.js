@@ -8,12 +8,12 @@ client.on("ready", () => {
 
 client.on("messageButtonClicked", (button, done) => {
     if (button.id === "hug-me") {
-        client.channels.cache.get(button.channelID).send(`**hugs** <@${button.clickedByID}>`)
+        button.channel.send(`**hugs** ${button.clickedUser}`)
         done();
     }
 
     if (button.id === "kick-me") {
-        client.channels.cache.get(button.channelID).send(`<@${button.clickedByID}> has been kicked (Not really)`, {
+        button.channel.send(`${button.clickedUser} has been kicked (Not really)`, {
             buttons: [{ id: 'unban', name: "undo" }]
         })
         done();
