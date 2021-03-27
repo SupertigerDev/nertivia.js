@@ -36,7 +36,7 @@ export class Client {
         this.token = null;
         this.user = undefined;
         this.listeners = new Map();
-        this.socket = io('https://nertivia.net', { autoConnect: true });
+        this.socket = io('https://nertivia.net', { autoConnect: true, transports: ["websocket"] });
         // this.socket = io('http://localhost/', { autoConnect: false });
         this.users = new Users(this);
         this.channels = new Channels(this);
