@@ -24,7 +24,7 @@ export default class DataManager {
         }
     }
     newUser(data: any) {
-        if (this.client.users.cache.has(data.uniqueID)) return this.client.users.cache.get(data.uniqueID);
+        if (this.client.users.cache.has(data.id)) return this.client.users.cache.get(data.id);
         const user = new User(data, this.client);
         this.client.users.cache.set(user.id, user);
         return user;

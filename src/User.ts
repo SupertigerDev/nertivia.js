@@ -20,7 +20,7 @@ export class User {
         this.tag = `${user.username}:${user.tag}`
         this.avatar = user.avatar
         this.avatarURL = END_POINTS.NERTIVIA_CDN + this.avatar;
-        this.id = user.uniqueID
+        this.id = user.id
         this.discriminator = user.tag
         this.client = client;
         this.presence = new Presence("invisible", user.custom_status, this, this.client);

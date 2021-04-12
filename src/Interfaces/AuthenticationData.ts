@@ -19,7 +19,7 @@ interface ServerRoles {
 }
 
 interface User {
-    uniqueID: string
+    id: string
     servers: Servers[]
 }
 interface Servers {

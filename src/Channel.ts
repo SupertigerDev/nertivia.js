@@ -16,7 +16,7 @@ export default class Channel {
         this.client = client
         this.recipient = undefined
         if (channel.recipients && channel.recipients.length) {
-            this.recipient = this.client.users.cache.get(channel.recipients[0].uniqueID)
+            this.recipient = this.client.users.cache.get(channel.recipients[0].id)
         }
     }
     send(content:string, options: SendOptions = {}) {

@@ -171,15 +171,15 @@ const events = {
     receiveMessage: (data:any, client: Client) => {
         return ["message", new Message(data.message, client)]
     },
-    userStatusChange: (data: {uniqueID: string, status: any}, client: Client) => {
-        const presence = client.users.cache.get(data.uniqueID)?.presence
+    userStatusChange: (data: {user_id: string, status: any}, client: Client) => {
+        const presence = client.users.cache.get(data.user_id)?.presence
         if (presence) {
             presence.status = PresenceStatusData[parseInt(data.status)] as PresenceStatus
             return ["presenceUpdate", presence]
         }
     },
-    ["member:custom_status_change"]: (data: {uniqueID: string, custom_status: string}, client: Client) => {
-        const presence = client.users.cache.get(data.uniqueID)?.presence
+    ["member:custom_status_change"]: (data: {user_id: string, custom_status: string}, client: Client) => {
+        const presence = client.users.cache.get(data.user_id)?.presence
         if (presence) {
             presence.activity = data.custom_status
             return ["presenceUpdate", presence]
@@ -187,7 +187,7 @@ const events = {
     },
     ["server:member_add"]: (data: {serverMember: any, custom_status: string, presence: string}, client: Client) => {
         if (client.guilds.cache.has(data.serverMember.server_id)) {
-            const clientPresence = client.users.cache.get(data.serverMember.member.uniqueID);
+            const clientPresence = client.users.cache.get(data.serverMember.member.id);
             if (clientPresence) {
                 if (data.presence) clientPresence.presence.status = PresenceStatusData[parseInt(data.presence)] as PresenceStatus;
                 if (data.custom_status) clientPresence.presence.activity = data.custom_status;
@@ -195,11 +195,11 @@ const events = {
             return ["guildMemberAdd", client.guilds.cache.get(data.serverMember.server_id)?._addMember(data.serverMember)];
         }
     },
-    ["server:member_remove"]: (data: {uniqueID: string, server_id: string}, client: Client) => {
+    ["server:member_remove"]: (data: {id: string, server_id: string}, client: Client) => {
         const guild = client.guilds.cache.get(data.server_id);
-        const member = guild?.members.get(data.uniqueID);
+        const member = guild?.members.get(data.id);
         const memberClone =  Object.assign( Object.create( Object.getPrototypeOf(member)), member)
-        guild?.members.delete(data.uniqueID);
+        guild?.members.delete(data.id);
         return ["guildMemberRemove", memberClone]
     },
     ["server:update_server"]: (data: {name?: string, server_id:string, avatar?: string, default_channel_id?: string}, client: Client) => {
