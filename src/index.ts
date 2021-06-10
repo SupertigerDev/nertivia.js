@@ -172,8 +172,8 @@ const events = {
         const message = new Message(data.message, client);
         const creator = data.message.creator
         if (message.author) {
-            message.author = creator.username;
-            message.author = creator.avatar;
+            message.author.username = creator.username;
+            message.author.avatar = creator.avatar;
         }
         return ["message", message]
     },
