@@ -169,7 +169,13 @@ function setMemberActivityStatus([id, activity]: any, client: Client) {
 
 const events = {
     receiveMessage: (data:any, client: Client) => {
-        return ["message", new Message(data.message, client)]
+        const message = new Message(data.message, client);
+        const creator = data.message.creator
+        if (message.author) {
+            message.author = creator.username;
+            message.author = creator.avatar;
+        }
+        return ["message", message]
     },
     userStatusChange: (data: {user_id: string, status: any}, client: Client) => {
         const presence = client.users.cache.get(data.user_id)?.presence
