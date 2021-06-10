@@ -28,7 +28,7 @@ export class User {
         }
     }
     get tag(): string {
-        return `${this.username}:${this.tag}`
+        return `${this.username}:${this.discriminator}`
     }
 
     toString() {
