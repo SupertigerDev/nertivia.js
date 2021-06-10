@@ -174,6 +174,7 @@ const events = {
         if (message.author) {
             message.author.username = creator.username;
             message.author.avatar = creator.avatar;
+            message.author.discriminator = creator.tag;
         }
         return ["message", message]
     },

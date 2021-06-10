@@ -7,7 +7,6 @@ import SendOptions from "./Interfaces/SendOptions";
 
 export class User {
     username: string
-    tag: string
     avatar: string
     id: string
     discriminator: string
@@ -17,7 +16,6 @@ export class User {
     bot: boolean;
     constructor(user: any, client: Client) {
         this.username = user.username
-        this.tag = `${user.username}:${user.tag}`
         this.avatar = user.avatar
         this.avatarURL = END_POINTS.NERTIVIA_CDN + this.avatar;
         this.id = user.id
@@ -29,6 +27,10 @@ export class User {
             this.presence.status = user.status
         }
     }
+    get tag(): string {
+        return `${this.username}:${this.tag}`
+    }
+
     toString() {
         return `<@${this.id}>`
     }
