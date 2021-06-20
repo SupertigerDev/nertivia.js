@@ -1,5 +1,4 @@
-import io from 'socket.io-client';
-const socketIOWildcard = require('socketio-wildcard')(io.Manager);
+import io, { Socket } from 'socket.io-client';
 
 import IAuthenticationData from './Interfaces/AuthenticationData';
 import {IClientEvents, clientEventsNames} from './Interfaces/ClientEvents';
@@ -16,6 +15,7 @@ import ServerMember from './ServerMember';
 import _HTMLEmbedBuilder from './HTMLEmbedBuilder';
 import Role from './Role';
 import Button from './Button';
+import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
 
 export const HTMLEmbedBuilder = _HTMLEmbedBuilder;
 export type HTMLEmbedBuilder = _HTMLEmbedBuilder;
@@ -26,7 +26,7 @@ export class Client {
     token: string | null;
     user: ClientUser | undefined;
     listeners: Map<keyof IClientEvents | any, any>;
-    socket: SocketIOClient.Socket;
+    socket: Socket<DefaultEventsMap, DefaultEventsMap>
     users: Users;
     channels: Channels;
     guilds: Guilds;
@@ -50,9 +50,9 @@ export class Client {
             if (this.token) reject(new Error("Already logged in."));
             this.token = token;
             this.socket.connect();
-            socketIOWildcard(this.socket)
             const connectEvent = () => {
-                this.socket.removeAllListeners();
+                this.socket.off()
+                this.socket.offAny();
                 this.socket.emit('authentication', {token})
                 this.socket.once('success', (data: IAuthenticationData) => {
                     resolve("success");
@@ -109,17 +109,18 @@ export class Client {
                 })
                 this.socket.once("auth_err", (data: string) => {
                     reject(new Error(data));
-                    this.socket.removeAllListeners();
+                    this.socket.off();
+                    this.socket.offAny();
                 })
                 this.socket.on("disconnect", () => {
                     const cb = this.listeners.get(clientEventsNames.error);
                     if (cb) cb(new Error("Connection Lost."))
                     else throw new Error("Connection Lost.")
-                    this.socket.removeAllListeners();
+                    this.socket.off();
+                    this.socket.offAny();
                     this.socket.on('connect', connectEvent);
                 })
-                this.socket.on('*', (res:any) => {
-                    const [event, data]: [any, any] = res.data;
+                this.socket.onAny((event, data) => {
                     if(Object.keys(events).includes(event)) {
                         const func: [string, any, any?] = (events as any)[event](data, this)
                         if (!func) { return;}
