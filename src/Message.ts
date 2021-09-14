@@ -18,10 +18,10 @@ export default class Message {
     constructor(message: any, client: Client) {
         this.id = message.messageID;
         this.content = message.message;
-        this.author = client.users.cache.get(message.creator.id) as any
+        this.author = client.users.cache.get(message?.creator?.id) as any
         this.channel = client.channels.cache.get(message.channelID);
         this.guild = this.channel?.guild;
-        this.member = this.guild?.members.get(message.creator.id) as any
+        this.member = this.guild?.members.get(message?.creator?.id) as any
         this.client = client;
         this.mentions = new MessageMentions(this, this.client)
     }
