@@ -189,6 +189,10 @@ const events = {
         }
         return ["updateMessage", message]
     },
+    delete_message: (data:any, client: Client) => {
+        const message = new Message(data, client);
+        return ["deleteMessage", message]
+    },
     userStatusChange: (data: {user_id: string, status: any}, client: Client) => {
         const presence = client.users.cache.get(data.user_id)?.presence
         if (presence) {
