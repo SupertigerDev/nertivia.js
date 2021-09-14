@@ -10,6 +10,7 @@ import Button from "../Button";
 export interface IClientEvents {
     ready?: () => void
     message: (message:Message) => void
+    updateMessage: (message:Message) => void
     presenceUpdate: (presence: Presence) => void
     guildMemberAdd: (serverMember: ServerMember) => void
     guildMemberRemove: (serverMember: ServerMember) => void
@@ -25,6 +26,7 @@ export interface IClientEvents {
 export enum clientEventsNames {
     ready  = "ready",
     message  = "receiveMessage",
+    updateMessage  = "update_message",
     presenceUpdate = "userStatusChange",
     guildMemberAdd = "server:member_add",
     guildMemberRemove = "server:member_remove",

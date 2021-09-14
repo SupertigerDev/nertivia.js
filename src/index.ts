@@ -179,6 +179,16 @@ const events = {
         }
         return ["message", message]
     },
+    update_message: (data:any, client: Client) => {
+        const message = new Message(data, client);
+        const creator = data.creator
+        if (message.author) {
+            message.author.username = creator.username;
+            message.author.avatar = creator.avatar;
+            message.author.discriminator = creator.tag;
+        }
+        return ["updateMessage", message]
+    },
     userStatusChange: (data: {user_id: string, status: any}, client: Client) => {
         const presence = client.users.cache.get(data.user_id)?.presence
         if (presence) {
