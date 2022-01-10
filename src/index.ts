@@ -16,6 +16,7 @@ import _HTMLEmbedBuilder from './HTMLEmbedBuilder';
 import Role from './Role';
 import Button from './Button';
 import { DefaultEventsMap } from 'socket.io-client/build/typed-events';
+import { AUTHENTICATED, AUTHENTICATION_ERROR, MESSAGE_BUTTON_CLICKED, MESSAGE_CREATED, MESSAGE_DELETED, MESSAGE_UPDATED, SERVER_JOINED, SERVER_LEFT, SERVER_MEMBERS, SERVER_MEMBER_ADDED, SERVER_MEMBER_REMOVED, SERVER_ROLES, SERVER_ROLE_CREATED, SERVER_ROLE_UPDATED, SERVER_UPDATED, USER_CUSTOM_STATUS_CHANGED, USER_STATUS_CHANGED } from './ServerEventNames';
 
 export const HTMLEmbedBuilder = _HTMLEmbedBuilder;
 export type HTMLEmbedBuilder = _HTMLEmbedBuilder;
@@ -54,9 +55,9 @@ export class Client {
                 this.socket.off()
                 this.socket.offAny();
                 this.socket.emit('authentication', {token})
-                this.socket.once('success', (data: IAuthenticationData) => {
+                this.socket.once(AUTHENTICATED, (data: IAuthenticationData) => {
                     resolve("success");
-                    this.socket.off('auth_err')
+                    this.socket.off(AUTHENTICATION_ERROR)
                     this.dataManager.newUser(data.user)
                     this.user = new ClientUser(data.user, this)
                     
@@ -107,7 +108,7 @@ export class Client {
                     const readyCB = this.listeners.get(clientEventsNames.ready);
                     if (readyCB) readyCB()
                 })
-                this.socket.once("auth_err", (data: string) => {
+                this.socket.once(AUTHENTICATION_ERROR, (data: string) => {
                     reject(new Error(data));
                     this.socket.off();
                     this.socket.offAny();
@@ -169,7 +170,7 @@ function setMemberActivityStatus([id, activity]: any, client: Client) {
 }
 
 const events = {
-    receiveMessage: (data:any, client: Client) => {
+    [MESSAGE_CREATED]: (data:any, client: Client) => {
         const message = new Message(data.message, client);
         const creator = data.message.creator
         if (message.author) {
@@ -179,7 +180,7 @@ const events = {
         }
         return ["message", message]
     },
-    update_message: (data:any, client: Client) => {
+    [MESSAGE_UPDATED]: (data:any, client: Client) => {
         const message = new Message(data, client);
         const creator = data.creator
         if (message.author) {
@@ -189,25 +190,25 @@ const events = {
         }
         return ["updateMessage", message]
     },
-    delete_message: (data:any, client: Client) => {
+    [MESSAGE_DELETED]: (data:any, client: Client) => {
         const message = new Message(data, client);
         return ["deleteMessage", message]
     },
-    userStatusChange: (data: {user_id: string, status: any}, client: Client) => {
+    [USER_STATUS_CHANGED]: (data: {user_id: string, status: any}, client: Client) => {
         const presence = client.users.cache.get(data.user_id)?.presence
         if (presence) {
             presence.status = PresenceStatusData[parseInt(data.status)] as PresenceStatus
             return ["presenceUpdate", presence]
         }
     },
-    ["member:custom_status_change"]: (data: {user_id: string, custom_status: string}, client: Client) => {
+    [USER_CUSTOM_STATUS_CHANGED]: (data: {user_id: string, custom_status: string}, client: Client) => {
         const presence = client.users.cache.get(data.user_id)?.presence
         if (presence) {
             presence.activity = data.custom_status
             return ["presenceUpdate", presence]
         }
     },
-    ["server:member_add"]: (data: {serverMember: any, custom_status: string, presence: string}, client: Client) => {
+    [SERVER_MEMBER_ADDED]: (data: {serverMember: any, custom_status: string, presence: string}, client: Client) => {
         if (client.guilds.cache.has(data.serverMember.server_id)) {
             const clientPresence = client.users.cache.get(data.serverMember.member.id);
             if (clientPresence) {
@@ -217,14 +218,14 @@ const events = {
             return ["guildMemberAdd", client.guilds.cache.get(data.serverMember.server_id)?._addMember(data.serverMember)];
         }
     },
-    ["server:member_remove"]: (data: {id: string, server_id: string}, client: Client) => {
+    [SERVER_MEMBER_REMOVED]: (data: {id: string, server_id: string}, client: Client) => {
         const guild = client.guilds.cache.get(data.server_id);
         const member = guild?.members.get(data.id);
         const memberClone =  Object.assign( Object.create( Object.getPrototypeOf(member)), member)
         guild?.members.delete(data.id);
         return ["guildMemberRemove", memberClone]
     },
-    ["server:update_server"]: (data: {name?: string, server_id:string, avatar?: string, default_channel_id?: string}, client: Client) => {
+    [SERVER_UPDATED]: (data: {name?: string, server_id:string, avatar?: string, default_channel_id?: string}, client: Client) => {
         if (client.guilds.cache.has(data.server_id)) { 
             const guild = client.guilds.cache.get(data.server_id);
             if (data.name) {
@@ -240,7 +241,7 @@ const events = {
         }
 
     },
-    ["server:joined"]: (server: any, client: Client) => {
+    [SERVER_JOINED]: (server: any, client: Client) => {
         const guild = new Guild(server, client);
         client.guilds.cache.set(server.server_id, guild);
         for (let index = 0; index < server.channels.length; index++) {
@@ -249,17 +250,17 @@ const events = {
         }
         return ["N/A"]              
     },
-    ["server:leave"]: (data: any, client: Client) => {
+    [SERVER_LEFT]: (data: any, client: Client) => {
         const guild = client.guilds.cache.get(data.server_id);
         if (guild) {
             client.guilds.cache.delete(data.server_id)
         }
         return ["guildDelete", guild]              
     },
-    ["message_button_clicked"]: (data: any, client: Client) => {
+    [MESSAGE_BUTTON_CLICKED]: (data: any, client: Client) => {
         return ["messageButtonClicked", new Button(data, client), buttonDone]              
     },
-    ["server:update_role"]: (data: any, client: Client) => {
+    [SERVER_ROLE_UPDATED]: (data: any, client: Client) => {
         const guild = client.guilds.cache.get(data.server_id);
         if (!guild) return;
         const role = guild.roles.cache.get(data.id);
@@ -269,7 +270,7 @@ const events = {
         role.name = data.name || role.name;
         return ["roleUpdate", role];         
     },
-    ["server:create_role"]: (data: any, client: Client) => {
+    [SERVER_ROLE_CREATED]: (data: any, client: Client) => {
         const guild = client.guilds.cache.get(data.server_id);
         if (!guild) return;
         if (guild.roles.cache.has(data.id)) return;
@@ -277,7 +278,7 @@ const events = {
         guild.roles.cache.set(data.id, role);
         return ["roleCreate", role];         
     },
-    ["server:members"]: (data: any, client: Client) => {
+    [SERVER_MEMBERS]: (data: any, client: Client) => {
         const { serverMembers, memberPresences, programActivityArr } = data;
         for (let index = 0; index < serverMembers.length; index++) {
             addServerMember(serverMembers[index], client);
@@ -296,7 +297,7 @@ const events = {
             return ["guildCreate", guild]
         }
     },
-    ["server:roles"]: (data: any, client: Client) => {
+    [SERVER_ROLES]: (data: any, client: Client) => {
         for (let i = 0; i < data.roles.length; i++) {
             addServerRoles(data.roles[i], client);
         }

@@ -6,6 +6,7 @@ import Guild from "../Guild";
 import MessageButton from "./MessageButton";
 import Role from "../Role";
 import Button from "../Button";
+import { MESSAGE_BUTTON_CLICKED, MESSAGE_CREATED, MESSAGE_DELETED, MESSAGE_UPDATED, SERVER_JOINED, SERVER_LEFT, SERVER_MEMBER_ADDED, SERVER_MEMBER_REMOVED, SERVER_ROLE_CREATED, SERVER_ROLE_UPDATED, SERVER_UPDATED, USER_STATUS_CHANGED } from "../ServerEventNames";
 
 export interface IClientEvents {
     ready?: () => void
@@ -24,19 +25,19 @@ export interface IClientEvents {
     guildUpdate: (guild: Guild) => void
 }
 
-export enum clientEventsNames {
-    ready  = "ready",
-    message  = "receiveMessage",
-    updateMessage  = "update_message",
-    deleteMessage  = "delete_message",
-    presenceUpdate = "userStatusChange",
-    guildMemberAdd = "server:member_add",
-    guildMemberRemove = "server:member_remove",
-    guildCreate = "server:joined",
-    messageButtonClicked = "message_button_clicked",
-    error = "error",
-    roleUpdate = "server:update_role",
-    roleCreate = "server:create_role",
-    guildDelete = "server:leave",
-    guildUpdate = "server:update_server"
+export const clientEventsNames = {
+    ready: "ready",
+    message : MESSAGE_CREATED,
+    updateMessage : MESSAGE_UPDATED,
+    deleteMessage : MESSAGE_DELETED,
+    presenceUpdate: USER_STATUS_CHANGED,
+    guildMemberAdd: SERVER_MEMBER_ADDED,
+    guildMemberRemove: SERVER_MEMBER_REMOVED,
+    guildCreate: SERVER_JOINED,
+    messageButtonClicked: MESSAGE_BUTTON_CLICKED,
+    error: "error",
+    roleUpdate: SERVER_ROLE_UPDATED,
+    roleCreate: SERVER_ROLE_CREATED,
+    guildDelete: SERVER_LEFT,
+    guildUpdate: SERVER_UPDATED
 }
