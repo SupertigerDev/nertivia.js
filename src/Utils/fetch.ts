@@ -62,7 +62,7 @@ export default class Fetch {
             })
         }
         return fetch.then(data =>
-            new Message(data.messageCreated, this.client)
+            new Message(data, this.client)
         )
     }
     deleteMessage(channel: Channel, message: Message) {

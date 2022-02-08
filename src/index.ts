@@ -171,7 +171,7 @@ function setMemberActivityStatus([id, activity]: any, client: Client) {
 
 const events = {
     [MESSAGE_CREATED]: (data:any, client: Client) => {
-        const message = new Message(data.message, client);
+        const message = new Message(data, client);
         const creator = data.message.creator
         if (message.author) {
             message.author.username = creator.username;
