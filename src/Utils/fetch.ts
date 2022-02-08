@@ -50,13 +50,13 @@ export default class Fetch {
         }
         if (channel instanceof User) {
             fetch = this.client.fetch.createDM(channel).then(chan =>
-                this.postJSON("post", END_POINTS.MESSAGES_CHANNELS_PATH + chan.id, {
+                this.postJSON("post", END_POINTS.messages(chan.id), {
                     message: content,
                     ...opts
                 })
             )
         } else {
-            fetch = this.postJSON("post", END_POINTS.MESSAGES_CHANNELS_PATH + channel.id, {
+            fetch = this.postJSON("post", END_POINTS.messages(channel.id), {
                 message: content,
                 ...opts
             })
@@ -66,12 +66,12 @@ export default class Fetch {
         )
     }
     deleteMessage(channel: Channel, message: Message) {
-        return this.postJSON('delete', END_POINTS.MESSAGES_PATH + `${message.id}/channels/${channel.id}`).then(() => {
+        return this.postJSON('delete', END_POINTS.message(channel.id, message.id)).then(() => {
             return message
         })
     }
     edit(content: string, opts: SendOptions, message: Message) {
-        return this.postJSON("patch", `${END_POINTS.MESSAGES + message.id}/channels/${message.channel?.id}`, {
+        return this.postJSON("patch", END_POINTS.message(message.channel?.id!, message.id), {
             message: content,
             ...opts
         }).then(data =>
@@ -81,7 +81,7 @@ export default class Fetch {
     createDM(recipient: User): Promise<Channel> {
         const channel = this.getExistingDM(recipient);
         if (channel) return Promise.resolve(channel);
-        return this.postJSON("post", END_POINTS.CHANNELS_PATH + recipient.id).then(({ channel }) => {
+        return this.postJSON("post", END_POINTS.openDMChannel(recipient.id)).then(({ channel }) => {
             const newChannel = this.client.dataManager.newChannel(channel)
             if (!newChannel) return Promise.reject(new Error("Failed to add channel."));
             return newChannel
@@ -98,8 +98,8 @@ export default class Fetch {
     setActivity(content: string) {
         return this.postJSON("post", `${END_POINTS.SETTINGS}/custom-status`, { custom_status: content })
     }
-    messageButtonCallback(channelID: string, messageID: string, buttonID: string, clickedByID: string, message?: string) {
-        return this.postJSON("patch", `${END_POINTS.CHANNELS_PATH}${channelID}/messages/${messageID}/button/${buttonID}`, { clickedByID, message })
+    messageButtonCallback(channelId: string, messageId: string, buttonId: string, clickedById: string, message?: string) {
+        return this.postJSON("patch", `${END_POINTS.CHANNELS_PATH}${channelId}/messages/${messageId}/buttons/${buttonId}`, { clickedById, message })
     }
     createRole(opts: CreateRole, guild: Guild) {
         const postData = {
