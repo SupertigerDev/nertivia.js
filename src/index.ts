@@ -307,6 +307,6 @@ const events = {
 
 function buttonDone(data: any, client: Client) {
     return function (message?: any) {
-        return client.fetch.messageButtonCallback(data.channelID, data.messageID, data.id, data.clickedByID, message)
+        return client.fetch.messageButtonCallback(data.channelId, data.messageID, data.id, data.clickedByID, message)
     }
 }

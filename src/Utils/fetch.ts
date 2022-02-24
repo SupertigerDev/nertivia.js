@@ -98,8 +98,8 @@ export default class Fetch {
     setActivity(content: string) {
         return this.postJSON("post", `${END_POINTS.SETTINGS}/custom-status`, { custom_status: content })
     }
-    messageButtonCallback(channelID: string, messageID: string, buttonID: string, clickedByID: string, message?: string) {
-        return this.postJSON("patch", `${END_POINTS.CHANNELS_PATH}${channelID}/messages/${messageID}/button/${buttonID}`, { clickedByID, message })
+    messageButtonCallback(channelId: string, messageID: string, buttonID: string, clickedByID: string, message?: string) {
+        return this.postJSON("patch", `${END_POINTS.CHANNELS_PATH}${channelId}/messages/${messageID}/button/${buttonID}`, { clickedByID, message })
     }
     createRole(opts: CreateRole, guild: Guild) {
         const postData = {

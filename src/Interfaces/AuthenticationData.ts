@@ -32,7 +32,7 @@ interface Servers {
 }
 interface Channel {
     name: string
-    channelID: string
+    channelId: string
     server_id?: string
     recipients?: (IUser & User)[]
 }

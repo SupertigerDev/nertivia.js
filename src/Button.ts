@@ -14,7 +14,7 @@ export default class Button {
         this.id = button.id;
         this.guild = client.guilds.cache.get(button.serverID);
         this.clickedUser = this.guild?.members.get(button.clickedByID);
-        this.channel = this.guild?.channels.get(button.channelID)
+        this.channel = this.guild?.channels.get(button.channelId)
         this.messageID = button.messageID
         this.client = client;
     }
