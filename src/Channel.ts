@@ -11,7 +11,7 @@ export default class Channel {
     client: Client;
     constructor(channel: any, client: Client) {
         this.name = channel.name
-        this.id = channel.channelID
+        this.id = channel.channelId
         this.guild = client.guilds.cache.get(channel.server_id);
         this.client = client
         this.recipient = undefined

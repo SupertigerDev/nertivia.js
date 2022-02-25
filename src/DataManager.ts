@@ -13,7 +13,7 @@ export default class DataManager {
         if (data.server_id) {
             guild = guild || this.client.guilds.cache.get(data.server_id);
             if (!guild) return;
-            guild.channels.set(data.channelID, channel)
+            guild.channels.set(data.channelId, channel)
         }
 
         if (channel) {

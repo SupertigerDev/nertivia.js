@@ -1,6 +1,6 @@
 export default interface MessageButton {
     id: string,
-    channelID: string,
+    channelId: string,
     messageID: string,
     clickedByID: string,
     serverID?: string,
