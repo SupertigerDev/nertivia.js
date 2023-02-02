@@ -16,7 +16,7 @@
   },
   "dependencies": {
     "@discordjs/collection": "^0.1.5",
-    "jsonhtmlfyer": "^0.1.9",
+    "jsonhtmlfyer": "^0.3.3",
     "node-fetch": "^2.6.0",
     "socket.io": "^4.1.2",
     "socket.io-client": "^4.1.2"
